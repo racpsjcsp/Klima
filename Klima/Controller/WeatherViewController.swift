@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftSoup
+import CoreLocation
 
 class WeatherViewController: UIViewController, UITextFieldDelegate {
 
@@ -15,6 +16,7 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var searchTextField: UITextField!
+    
     
     @IBOutlet weak var dia0: UILabel!
     @IBOutlet weak var min0: UILabel!
@@ -44,863 +46,46 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var min6: UILabel!
     @IBOutlet weak var max6: UILabel!
     
+//    var weatherManager = WeatherManager()
+    let locationManager = CLLocationManager()
+    var weatherManager = WeatherManager()
+    var lat: String = ""
+    var lon: String = ""
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //alertar a classe de que o usuário está digitando texto
+//        searchTextField.delegate = self
+        
+        print("carregou didload")
+        
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestLocation()
+        
+        weatherManager.delegate = self
         searchTextField.delegate = self
         
         
         
-        do {
-                    let html = """
-<div id="week" class="center">
-
-                    <div class="summary">
-                              No precipitation throughout the&nbsp;week.
-                            </div>
-
-                    <a class="day" data-day="0">
-                        <span class="date__icon__details">
-                            <span class="skycon">
-                                <img src="/images/weather-icons/partly-cloudy-day.png" class="partly-cloudy-day-icon" alt="partly-cloudy-day Icon">
-                            </span>
-
-                            <span class="name">
-                                            
-                                              Today
-                                              
-                                          </span>
-
-                        </span>
-
-                        <span class="tempRange">
-                            <span class="minTemp" style="left:-2%">14˚</span>
-
-                            <span class="bar" style="width:89%; margin-left:-2%"></span>
-
-                            <span class="maxTemp" style="left:87%">30˚</span>
-                        </span>
-
-                        <span class="toggle">
-                            <span class="open">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
-                                    <defs>
-                                        <style>
-                                        .cls-1 {
-                                            fill: #778;
-                                        }
-                                        </style>
-                                    </defs>
-                                    <circle class="cls-1" cx="9" cy="9" r="9"/>
-                                    <image x="8" y="4" width="2" height="10" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAKAQMAAACkKx0KAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABlBMVEX///8AAABVwtN+AAAAAWJLR0QB/wIt3gAAAAlwSFlzAAAuIwAALiMBeKU/dgAAAAtJREFUCNdjYMAEAAAUAAHlhrBKAAAAAElFTkSuQmCC"/>
-                                    <image data-name="Layer 1 copy" x="4" y="8" width="10" height="2" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAACAgMAAAAcD6VDAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACVBMVEX///////8AAACO9MPsAAAAAXRSTlP9g+pWxwAAAAFiS0dEAmYLfGQAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAQSURBVAjXYwgNDWAQDQ0AAAciAbVeQnWtAAAAAElFTkSuQmCC"/>
-                                </svg>
-                            </span>
-                            <span class="close">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
-                                    <defs>
-                                        <style>
-                                        .cls-1 {
-                                            fill: #778;
-                                        }
-                                        </style>
-                                    </defs>
-                                    <circle class="cls-1" cx="9" cy="9" r="9"/>
-                                    <image data-name="Layer 1 copy" x="4" y="8" width="10" height="2" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAACAgMAAAAcD6VDAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACVBMVEX///////8AAACO9MPsAAAAAXRSTlP9g+pWxwAAAAFiS0dEAmYLfGQAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAQSURBVAjXYwgNDWAQDQ0AAAciAbVeQnWtAAAAAElFTkSuQmCC"/>
-                                </svg>
-
-                            </span>
-                        </span>
-                    </a>
-
-                    <div class="dayDetails">
-
-                        <div class="summary_container">
-                            <div class="summary">Mostly cloudy throughout the day.</div>
-
-                            <div class="dayExtras">
-                                <div class="highLowTemp swip">
-                                    <span class="highTemp swip">
-                                        <span class="temp">14˚</span>
-                                        <span class="time">4:49</span>
-                                    </span>
-
-                                    <span class="arrow">→</span>
-
-                                    <span class="lowTemp swap">
-                                        <span class="temp">30˚</span>
-                                        <span class="time">15:14</span>
-                                    </span>
-                                </div>
-
-                                <div class="sunTimes">
-
-                                    <span class="sunrise swip">
-                                        <img src="/images/sunrise.png" width="28" height="30" alt="Sunrise Icon">
-                                        <span class="time">6:11</span>
-                                    </span>
-
-                                    <span class="sunset swap">
-                                        <img src="/images/sunset.png" width="28" height="30" alt="Sunset Icon">
-                                        <span class="time">17:56</span>
-                                    </span>
-
-                                </div>
-
-                                <div class="precipAccum swap">
-                                    <span class="label swip">Rain</span>
-                                    <span class="val swap">
-
-                                        <span class="num swip">0.07</span>
-                                        <span class="unit swap">mm</span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-container-scroll">
-                            <div class="timeline_container">
-                                <div class="timeline">
-                                    <div class="stripes"></div>
-                                    <div class="hour_ticks"></div>
-                                    <div class="hours"></div>
-                                    <div class="temps"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <a class="moreDetails" href="/details/-23.2366,-45.8592/2020-9-5/ca24/en" rel="nofollow">More Details</a>
-                    </div>
-
-                    <a class="day" data-day="1">
-                        <span class="date__icon__details">
-                            <span class="skycon">
-                                <img src="/images/weather-icons/cloudy.png" class="cloudy-icon" alt="cloudy Icon">
-                            </span>
-
-                            <span class="name">
-                                            
-                                                Sun
-                                                
-                                          </span>
-
-                        </span>
-
-                        <span class="tempRange">
-                            <span class="minTemp" style="left:10%">16˚</span>
-
-                            <span class="bar" style="width:78%; margin-left:10%"></span>
-
-                            <span class="maxTemp" style="left:88%">30˚</span>
-                        </span>
-
-                        <span class="toggle">
-                            <span class="open">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
-                                    <defs>
-                                        <style>
-                                        .cls-1 {
-                                            fill: #778;
-                                        }
-                                        </style>
-                                    </defs>
-                                    <circle class="cls-1" cx="9" cy="9" r="9"/>
-                                    <image x="8" y="4" width="2" height="10" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAKAQMAAACkKx0KAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABlBMVEX///8AAABVwtN+AAAAAWJLR0QB/wIt3gAAAAlwSFlzAAAuIwAALiMBeKU/dgAAAAtJREFUCNdjYMAEAAAUAAHlhrBKAAAAAElFTkSuQmCC"/>
-                                    <image data-name="Layer 1 copy" x="4" y="8" width="10" height="2" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAACAgMAAAAcD6VDAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACVBMVEX///////8AAACO9MPsAAAAAXRSTlP9g+pWxwAAAAFiS0dEAmYLfGQAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAQSURBVAjXYwgNDWAQDQ0AAAciAbVeQnWtAAAAAElFTkSuQmCC"/>
-                                </svg>
-                            </span>
-                            <span class="close">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
-                                    <defs>
-                                        <style>
-                                        .cls-1 {
-                                            fill: #778;
-                                        }
-                                        </style>
-                                    </defs>
-                                    <circle class="cls-1" cx="9" cy="9" r="9"/>
-                                    <image data-name="Layer 1 copy" x="4" y="8" width="10" height="2" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAACAgMAAAAcD6VDAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACVBMVEX///////8AAACO9MPsAAAAAXRSTlP9g+pWxwAAAAFiS0dEAmYLfGQAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAQSURBVAjXYwgNDWAQDQ0AAAciAbVeQnWtAAAAAElFTkSuQmCC"/>
-                                </svg>
-
-                            </span>
-                        </span>
-                    </a>
-
-                    <div class="dayDetails">
-
-                        <div class="summary_container">
-                            <div class="summary">Overcast throughout the day.</div>
-
-                            <div class="dayExtras">
-                                <div class="highLowTemp swip">
-                                    <span class="highTemp swip">
-                                        <span class="temp">16˚</span>
-                                        <span class="time">5:53</span>
-                                    </span>
-
-                                    <span class="arrow">→</span>
-
-                                    <span class="lowTemp swap">
-                                        <span class="temp">30˚</span>
-                                        <span class="time">14:40</span>
-                                    </span>
-                                </div>
-
-                                <div class="sunTimes">
-
-                                    <span class="sunrise swip">
-                                        <img src="/images/sunrise.png" width="28" height="30" alt="Sunrise Icon">
-                                        <span class="time">6:10</span>
-                                    </span>
-
-                                    <span class="sunset swap">
-                                        <img src="/images/sunset.png" width="28" height="30" alt="Sunset Icon">
-                                        <span class="time">17:56</span>
-                                    </span>
-
-                                </div>
-
-                                <div class="precipAccum swap">
-                                    <span class="label swip">Rain</span>
-                                    <span class="val swap">
-
-                                        <span class="num swip">0.05</span>
-                                        <span class="unit swap">mm</span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-container-scroll">
-                            <div class="timeline_container">
-                                <div class="timeline">
-                                    <div class="stripes"></div>
-                                    <div class="hour_ticks"></div>
-                                    <div class="hours"></div>
-                                    <div class="temps"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <a class="moreDetails" href="/details/-23.2366,-45.8592/2020-9-6/ca24/en" rel="nofollow">More Details</a>
-                    </div>
-
-                    <a class="day" data-day="2">
-                        <span class="date__icon__details">
-                            <span class="skycon">
-                                <img src="/images/weather-icons/clear-day.png" class="clear-day-icon" alt="clear-day Icon">
-                            </span>
-
-                            <span class="name">
-                                            
-                                                Mon
-                                                
-                                          </span>
-
-                        </span>
-
-                        <span class="tempRange">
-                            <span class="minTemp" style="left:10%">16˚</span>
-
-                            <span class="bar" style="width:78%; margin-left:10%"></span>
-
-                            <span class="maxTemp" style="left:88%">30˚</span>
-                        </span>
-
-                        <span class="toggle">
-                            <span class="open">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
-                                    <defs>
-                                        <style>
-                                        .cls-1 {
-                                            fill: #778;
-                                        }
-                                        </style>
-                                    </defs>
-                                    <circle class="cls-1" cx="9" cy="9" r="9"/>
-                                    <image x="8" y="4" width="2" height="10" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAKAQMAAACkKx0KAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABlBMVEX///8AAABVwtN+AAAAAWJLR0QB/wIt3gAAAAlwSFlzAAAuIwAALiMBeKU/dgAAAAtJREFUCNdjYMAEAAAUAAHlhrBKAAAAAElFTkSuQmCC"/>
-                                    <image data-name="Layer 1 copy" x="4" y="8" width="10" height="2" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAACAgMAAAAcD6VDAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACVBMVEX///////8AAACO9MPsAAAAAXRSTlP9g+pWxwAAAAFiS0dEAmYLfGQAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAQSURBVAjXYwgNDWAQDQ0AAAciAbVeQnWtAAAAAElFTkSuQmCC"/>
-                                </svg>
-                            </span>
-                            <span class="close">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
-                                    <defs>
-                                        <style>
-                                        .cls-1 {
-                                            fill: #778;
-                                        }
-                                        </style>
-                                    </defs>
-                                    <circle class="cls-1" cx="9" cy="9" r="9"/>
-                                    <image data-name="Layer 1 copy" x="4" y="8" width="10" height="2" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAACAgMAAAAcD6VDAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACVBMVEX///////8AAACO9MPsAAAAAXRSTlP9g+pWxwAAAAFiS0dEAmYLfGQAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAQSURBVAjXYwgNDWAQDQ0AAAciAbVeQnWtAAAAAElFTkSuQmCC"/>
-                                </svg>
-
-                            </span>
-                        </span>
-                    </a>
-
-                    <div class="dayDetails">
-
-                        <div class="summary_container">
-                            <div class="summary">Clear throughout the day.</div>
-
-                            <div class="dayExtras">
-                                <div class="highLowTemp swip">
-                                    <span class="highTemp swip">
-                                        <span class="temp">16˚</span>
-                                        <span class="time">5:48</span>
-                                    </span>
-
-                                    <span class="arrow">→</span>
-
-                                    <span class="lowTemp swap">
-                                        <span class="temp">30˚</span>
-                                        <span class="time">14:50</span>
-                                    </span>
-                                </div>
-
-                                <div class="sunTimes">
-
-                                    <span class="sunrise swip">
-                                        <img src="/images/sunrise.png" width="28" height="30" alt="Sunrise Icon">
-                                        <span class="time">6:09</span>
-                                    </span>
-
-                                    <span class="sunset swap">
-                                        <img src="/images/sunset.png" width="28" height="30" alt="Sunset Icon">
-                                        <span class="time">17:56</span>
-                                    </span>
-
-                                </div>
-
-                                <div class="precipAccum swap">
-                                    <span class="label swip">Rain</span>
-                                    <span class="val swap">
-
-                                        <span class="num swip">0.04</span>
-                                        <span class="unit swap">mm</span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-container-scroll">
-                            <div class="timeline_container">
-                                <div class="timeline">
-                                    <div class="stripes"></div>
-                                    <div class="hour_ticks"></div>
-                                    <div class="hours"></div>
-                                    <div class="temps"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <a class="moreDetails" href="/details/-23.2366,-45.8592/2020-9-7/ca24/en" rel="nofollow">More Details</a>
-                    </div>
-
-                    <a class="day" data-day="3">
-                        <span class="date__icon__details">
-                            <span class="skycon">
-                                <img src="/images/weather-icons/clear-day.png" class="clear-day-icon" alt="clear-day Icon">
-                            </span>
-
-                            <span class="name">
-                                            
-                                                Tue
-                                                
-                                          </span>
-
-                        </span>
-
-                        <span class="tempRange">
-                            <span class="minTemp" style="left:10%">16˚</span>
-
-                            <span class="bar" style="width:78%; margin-left:10%"></span>
-
-                            <span class="maxTemp" style="left:88%">30˚</span>
-                        </span>
-
-                        <span class="toggle">
-                            <span class="open">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
-                                    <defs>
-                                        <style>
-                                        .cls-1 {
-                                            fill: #778;
-                                        }
-                                        </style>
-                                    </defs>
-                                    <circle class="cls-1" cx="9" cy="9" r="9"/>
-                                    <image x="8" y="4" width="2" height="10" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAKAQMAAACkKx0KAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABlBMVEX///8AAABVwtN+AAAAAWJLR0QB/wIt3gAAAAlwSFlzAAAuIwAALiMBeKU/dgAAAAtJREFUCNdjYMAEAAAUAAHlhrBKAAAAAElFTkSuQmCC"/>
-                                    <image data-name="Layer 1 copy" x="4" y="8" width="10" height="2" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAACAgMAAAAcD6VDAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACVBMVEX///////8AAACO9MPsAAAAAXRSTlP9g+pWxwAAAAFiS0dEAmYLfGQAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAQSURBVAjXYwgNDWAQDQ0AAAciAbVeQnWtAAAAAElFTkSuQmCC"/>
-                                </svg>
-                            </span>
-                            <span class="close">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
-                                    <defs>
-                                        <style>
-                                        .cls-1 {
-                                            fill: #778;
-                                        }
-                                        </style>
-                                    </defs>
-                                    <circle class="cls-1" cx="9" cy="9" r="9"/>
-                                    <image data-name="Layer 1 copy" x="4" y="8" width="10" height="2" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAACAgMAAAAcD6VDAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACVBMVEX///////8AAACO9MPsAAAAAXRSTlP9g+pWxwAAAAFiS0dEAmYLfGQAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAQSURBVAjXYwgNDWAQDQ0AAAciAbVeQnWtAAAAAElFTkSuQmCC"/>
-                                </svg>
-
-                            </span>
-                        </span>
-                    </a>
-
-                    <div class="dayDetails">
-
-                        <div class="summary_container">
-                            <div class="summary">Clear throughout the day.</div>
-
-                            <div class="dayExtras">
-                                <div class="highLowTemp swip">
-                                    <span class="highTemp swip">
-                                        <span class="temp">16˚</span>
-                                        <span class="time">6:01</span>
-                                    </span>
-
-                                    <span class="arrow">→</span>
-
-                                    <span class="lowTemp swap">
-                                        <span class="temp">30˚</span>
-                                        <span class="time">14:43</span>
-                                    </span>
-                                </div>
-
-                                <div class="sunTimes">
-
-                                    <span class="sunrise swip">
-                                        <img src="/images/sunrise.png" width="28" height="30" alt="Sunrise Icon">
-                                        <span class="time">6:08</span>
-                                    </span>
-
-                                    <span class="sunset swap">
-                                        <img src="/images/sunset.png" width="28" height="30" alt="Sunset Icon">
-                                        <span class="time">17:57</span>
-                                    </span>
-
-                                </div>
-
-                                <div class="precipAccum swap">
-                                    <span class="label swip">Rain</span>
-                                    <span class="val swap">
-
-                                        <span class="num swip">0.06</span>
-                                        <span class="unit swap">mm</span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-container-scroll">
-                            <div class="timeline_container">
-                                <div class="timeline">
-                                    <div class="stripes"></div>
-                                    <div class="hour_ticks"></div>
-                                    <div class="hours"></div>
-                                    <div class="temps"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <a class="moreDetails" href="/details/-23.2366,-45.8592/2020-9-8/ca24/en" rel="nofollow">More Details</a>
-                    </div>
-
-                    <a class="day" data-day="4">
-                        <span class="date__icon__details">
-                            <span class="skycon">
-                                <img src="/images/weather-icons/clear-day.png" class="clear-day-icon" alt="clear-day Icon">
-                            </span>
-
-                            <span class="name">
-                                            
-                                                Wed
-                                                
-                                          </span>
-
-                        </span>
-
-                        <span class="tempRange">
-                            <span class="minTemp" style="left:15%">17˚</span>
-
-                            <span class="bar" style="width:73%; margin-left:15%"></span>
-
-                            <span class="maxTemp" style="left:88%">30˚</span>
-                        </span>
-
-                        <span class="toggle">
-                            <span class="open">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
-                                    <defs>
-                                        <style>
-                                        .cls-1 {
-                                            fill: #778;
-                                        }
-                                        </style>
-                                    </defs>
-                                    <circle class="cls-1" cx="9" cy="9" r="9"/>
-                                    <image x="8" y="4" width="2" height="10" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAKAQMAAACkKx0KAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABlBMVEX///8AAABVwtN+AAAAAWJLR0QB/wIt3gAAAAlwSFlzAAAuIwAALiMBeKU/dgAAAAtJREFUCNdjYMAEAAAUAAHlhrBKAAAAAElFTkSuQmCC"/>
-                                    <image data-name="Layer 1 copy" x="4" y="8" width="10" height="2" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAACAgMAAAAcD6VDAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACVBMVEX///////8AAACO9MPsAAAAAXRSTlP9g+pWxwAAAAFiS0dEAmYLfGQAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAQSURBVAjXYwgNDWAQDQ0AAAciAbVeQnWtAAAAAElFTkSuQmCC"/>
-                                </svg>
-                            </span>
-                            <span class="close">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
-                                    <defs>
-                                        <style>
-                                        .cls-1 {
-                                            fill: #778;
-                                        }
-                                        </style>
-                                    </defs>
-                                    <circle class="cls-1" cx="9" cy="9" r="9"/>
-                                    <image data-name="Layer 1 copy" x="4" y="8" width="10" height="2" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAACAgMAAAAcD6VDAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACVBMVEX///////8AAACO9MPsAAAAAXRSTlP9g+pWxwAAAAFiS0dEAmYLfGQAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAQSURBVAjXYwgNDWAQDQ0AAAciAbVeQnWtAAAAAElFTkSuQmCC"/>
-                                </svg>
-
-                            </span>
-                        </span>
-                    </a>
-
-                    <div class="dayDetails">
-
-                        <div class="summary_container">
-                            <div class="summary">Clear throughout the day.</div>
-
-                            <div class="dayExtras">
-                                <div class="highLowTemp swip">
-                                    <span class="highTemp swip">
-                                        <span class="temp">17˚</span>
-                                        <span class="time">5:52</span>
-                                    </span>
-
-                                    <span class="arrow">→</span>
-
-                                    <span class="lowTemp swap">
-                                        <span class="temp">30˚</span>
-                                        <span class="time">14:46</span>
-                                    </span>
-                                </div>
-
-                                <div class="sunTimes">
-
-                                    <span class="sunrise swip">
-                                        <img src="/images/sunrise.png" width="28" height="30" alt="Sunrise Icon">
-                                        <span class="time">6:07</span>
-                                    </span>
-
-                                    <span class="sunset swap">
-                                        <img src="/images/sunset.png" width="28" height="30" alt="Sunset Icon">
-                                        <span class="time">17:57</span>
-                                    </span>
-
-                                </div>
-
-                                <div class="precipAccum swap">
-                                    <span class="label swip">Rain</span>
-                                    <span class="val swap">
-
-                                        <span class="num swip">0.1</span>
-                                        <span class="unit swap">mm</span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-container-scroll">
-                            <div class="timeline_container">
-                                <div class="timeline">
-                                    <div class="stripes"></div>
-                                    <div class="hour_ticks"></div>
-                                    <div class="hours"></div>
-                                    <div class="temps"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <a class="moreDetails" href="/details/-23.2366,-45.8592/2020-9-9/ca24/en" rel="nofollow">More Details</a>
-                    </div>
-
-                    <a class="day" data-day="5">
-                        <span class="date__icon__details">
-                            <span class="skycon">
-                                <img src="/images/weather-icons/partly-cloudy-day.png" class="partly-cloudy-day-icon" alt="partly-cloudy-day Icon">
-                            </span>
-
-                            <span class="name">
-                                            
-                                                Thu
-                                                
-                                          </span>
-
-                        </span>
-
-                        <span class="tempRange">
-                            <span class="minTemp" style="left:21%">18˚</span>
-
-                            <span class="bar" style="width:73%; margin-left:21%"></span>
-
-                            <span class="maxTemp" style="left:94%">31˚</span>
-                        </span>
-
-                        <span class="toggle">
-                            <span class="open">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
-                                    <defs>
-                                        <style>
-                                        .cls-1 {
-                                            fill: #778;
-                                        }
-                                        </style>
-                                    </defs>
-                                    <circle class="cls-1" cx="9" cy="9" r="9"/>
-                                    <image x="8" y="4" width="2" height="10" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAKAQMAAACkKx0KAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABlBMVEX///8AAABVwtN+AAAAAWJLR0QB/wIt3gAAAAlwSFlzAAAuIwAALiMBeKU/dgAAAAtJREFUCNdjYMAEAAAUAAHlhrBKAAAAAElFTkSuQmCC"/>
-                                    <image data-name="Layer 1 copy" x="4" y="8" width="10" height="2" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAACAgMAAAAcD6VDAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACVBMVEX///////8AAACO9MPsAAAAAXRSTlP9g+pWxwAAAAFiS0dEAmYLfGQAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAQSURBVAjXYwgNDWAQDQ0AAAciAbVeQnWtAAAAAElFTkSuQmCC"/>
-                                </svg>
-                            </span>
-                            <span class="close">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
-                                    <defs>
-                                        <style>
-                                        .cls-1 {
-                                            fill: #778;
-                                        }
-                                        </style>
-                                    </defs>
-                                    <circle class="cls-1" cx="9" cy="9" r="9"/>
-                                    <image data-name="Layer 1 copy" x="4" y="8" width="10" height="2" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAACAgMAAAAcD6VDAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACVBMVEX///////8AAACO9MPsAAAAAXRSTlP9g+pWxwAAAAFiS0dEAmYLfGQAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAQSURBVAjXYwgNDWAQDQ0AAAciAbVeQnWtAAAAAElFTkSuQmCC"/>
-                                </svg>
-
-                            </span>
-                        </span>
-                    </a>
-
-                    <div class="dayDetails">
-
-                        <div class="summary_container">
-                            <div class="summary">Mostly cloudy throughout the day.</div>
-
-                            <div class="dayExtras">
-                                <div class="highLowTemp swip">
-                                    <span class="highTemp swip">
-                                        <span class="temp">18˚</span>
-                                        <span class="time">5:40</span>
-                                    </span>
-
-                                    <span class="arrow">→</span>
-
-                                    <span class="lowTemp swap">
-                                        <span class="temp">31˚</span>
-                                        <span class="time">14:51</span>
-                                    </span>
-                                </div>
-
-                                <div class="sunTimes">
-
-                                    <span class="sunrise swip">
-                                        <img src="/images/sunrise.png" width="28" height="30" alt="Sunrise Icon">
-                                        <span class="time">6:06</span>
-                                    </span>
-
-                                    <span class="sunset swap">
-                                        <img src="/images/sunset.png" width="28" height="30" alt="Sunset Icon">
-                                        <span class="time">17:57</span>
-                                    </span>
-
-                                </div>
-
-                                <div class="precipAccum swap">
-                                    <span class="label swip">Rain</span>
-                                    <span class="val swap">
-
-                                        <span class="num swip">0.07</span>
-                                        <span class="unit swap">mm</span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-container-scroll">
-                            <div class="timeline_container">
-                                <div class="timeline">
-                                    <div class="stripes"></div>
-                                    <div class="hour_ticks"></div>
-                                    <div class="hours"></div>
-                                    <div class="temps"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <a class="moreDetails" href="/details/-23.2366,-45.8592/2020-9-10/ca24/en" rel="nofollow">More Details</a>
-                    </div>
-
-                    <a class="day" data-day="6">
-                        <span class="date__icon__details">
-                            <span class="skycon">
-                                <img src="/images/weather-icons/clear-day.png" class="clear-day-icon" alt="clear-day Icon">
-                            </span>
-
-                            <span class="name">
-                                            
-                                                Fri
-                                                
-                                          </span>
-
-                        </span>
-
-                        <span class="tempRange">
-                            <span class="minTemp" style="left:21%">18˚</span>
-
-                            <span class="bar" style="width:78%; margin-left:21%"></span>
-
-                            <span class="maxTemp" style="left:99%">32˚</span>
-                        </span>
-
-                        <span class="toggle">
-                            <span class="open">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
-                                    <defs>
-                                        <style>
-                                        .cls-1 {
-                                            fill: #778;
-                                        }
-                                        </style>
-                                    </defs>
-                                    <circle class="cls-1" cx="9" cy="9" r="9"/>
-                                    <image x="8" y="4" width="2" height="10" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAKAQMAAACkKx0KAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABlBMVEX///8AAABVwtN+AAAAAWJLR0QB/wIt3gAAAAlwSFlzAAAuIwAALiMBeKU/dgAAAAtJREFUCNdjYMAEAAAUAAHlhrBKAAAAAElFTkSuQmCC"/>
-                                    <image data-name="Layer 1 copy" x="4" y="8" width="10" height="2" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAACAgMAAAAcD6VDAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACVBMVEX///////8AAACO9MPsAAAAAXRSTlP9g+pWxwAAAAFiS0dEAmYLfGQAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAQSURBVAjXYwgNDWAQDQ0AAAciAbVeQnWtAAAAAElFTkSuQmCC"/>
-                                </svg>
-                            </span>
-                            <span class="close">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
-                                    <defs>
-                                        <style>
-                                        .cls-1 {
-                                            fill: #778;
-                                        }
-                                        </style>
-                                    </defs>
-                                    <circle class="cls-1" cx="9" cy="9" r="9"/>
-                                    <image data-name="Layer 1 copy" x="4" y="8" width="10" height="2" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAACAgMAAAAcD6VDAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACVBMVEX///////8AAACO9MPsAAAAAXRSTlP9g+pWxwAAAAFiS0dEAmYLfGQAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAQSURBVAjXYwgNDWAQDQ0AAAciAbVeQnWtAAAAAElFTkSuQmCC"/>
-                                </svg>
-
-                            </span>
-                        </span>
-                    </a>
-
-                    <div class="dayDetails">
-
-                        <div class="summary_container">
-                            <div class="summary">Clear throughout the day.</div>
-
-                            <div class="dayExtras">
-                                <div class="highLowTemp swip">
-                                    <span class="highTemp swip">
-                                        <span class="temp">18˚</span>
-                                        <span class="time">5:46</span>
-                                    </span>
-
-                                    <span class="arrow">→</span>
-
-                                    <span class="lowTemp swap">
-                                        <span class="temp">32˚</span>
-                                        <span class="time">14:36</span>
-                                    </span>
-                                </div>
-
-                                <div class="sunTimes">
-
-                                    <span class="sunrise swip">
-                                        <img src="/images/sunrise.png" width="28" height="30" alt="Sunrise Icon">
-                                        <span class="time">6:05</span>
-                                    </span>
-
-                                    <span class="sunset swap">
-                                        <img src="/images/sunset.png" width="28" height="30" alt="Sunset Icon">
-                                        <span class="time">17:58</span>
-                                    </span>
-
-                                </div>
-
-                                <div class="precipAccum swap">
-                                    <span class="label swip">Rain</span>
-                                    <span class="val swap">
-
-                                        <span class="num swip">0.13</span>
-                                        <span class="unit swap">mm</span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-container-scroll">
-                            <div class="timeline_container">
-                                <div class="timeline">
-                                    <div class="stripes"></div>
-                                    <div class="hour_ticks"></div>
-                                    <div class="hours"></div>
-                                    <div class="temps"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <a class="moreDetails" href="/details/-23.2366,-45.8592/2020-9-11/ca24/en" rel="nofollow">More Details</a>
-                    </div>
-
-                    <a class="day" data-day="7">
-                        <span class="date__icon__details">
-                            <span class="skycon">
-                                <img src="/images/weather-icons/cloudy.png" class="cloudy-icon" alt="cloudy Icon">
-                            </span>
-
-                            <span class="name">
-                                            
-                                                Sat
-                                                
-                                          </span>
-                            </span>
-"""
-                    
-                    let element: Element = try SwiftSoup.parse(html).getElementById("week")!
-                    
-                    let days: Elements = try element.getElementsByClass("day")
-                    
-                    for divs: Element in days {
-                        if let day: Element = try divs.getElementsByClass("name").first() {
-                            dia0.text = try day.text()
-                            print(try day.text())
-                        }
-                        if let minTemp: Element = try divs.getElementsByClass("minTemp").first() {
-                            min0.text = try minTemp.text()
-                            print(try minTemp.text())
-                        }
-                        if let maxTemp: Element = try divs.getElementsByClass("maxTemp").first() {
-                            max0.text = try maxTemp.text()
-                            print(try maxTemp.text())
-                        }
-                    }
-
-                } catch Exception.Error(type: let type, Message: let message) {
-                    print(type)
-                    print(message)
-                } catch {
-                    print("")
-                }
-        }
-
+        
+        
+//        raspagemHTML()
+    }
     
     @IBAction func searchPressed(_ sender: UIButton) {
         //esconde o teclado qdo usuário termina de digitar
         searchTextField.endEditing(true)
-    
+        
         print(searchTextField.text!)
     }
     
+    @IBAction func favoritePressed(_ sender: UIButton) {
+    
+    }
+   
     //detectar qdo clicar no "ir" (return) do teclado"
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         searchTextField.endEditing(true)
@@ -920,9 +105,155 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     
     //limpa o campo de busca
     func textFieldDidEndEditing(_ textField: UITextField) {
-        //
-        searchTextField.text = ""
+        //Use searchTextField.text to get weather for that city
+        if let city = searchTextField.text {
+            weatherManager.fetchWeather(cityName: city)
+        }
+        
+        searchTextField.text = "" //clear searchTextField after user finish the search
+        
     }
-    
+
+        
+    func raspagemHTML() {
+            
+            let darkskyURL = "https://darksky.net/forecast/\(lat),\(lon)/ca24/en"
+                
+                let url = URL(string: darkskyURL)
+                
+                let task = URLSession.shared.dataTask(with: url!) { (data, resp, error) in
+                    guard let data = data else {
+                        print("data was nil")
+                        return
+                    }
+                
+                    guard let htmlString = String(data: data, encoding: String.Encoding.utf8) else {
+                        print("Cant cast data into string")
+                        return
+                    }
+                    
+                        do {
+                            let html = htmlString
+                            
+//                            let elementCity: Elements = try SwiftSoup.parse(html).select("title")
+                            
+                            
+//                            print("pegando cidade...")
+//                            print(elementCity[0])
+                            let element: Element = try SwiftSoup.parse(html).getElementById("week")!
+                            
+                            let days: Elements = try element.getElementsByClass("day")
+                            
+                            var dataDay: [String] = []
+                            var dataMin: [String] = []
+                            var dataMax: [String] = []
+                            for divs: Element in days {
+//                                print(divs)
+                                if let day: Element = try divs.getElementsByClass("name").first() {
+                                    dataDay.append(try day.text())
+                                    //print(try day.text())
+                                }
+                                if let minTemp: Element = try divs.getElementsByClass("minTemp").first() {
+                                    dataMin.append(try minTemp.text())
+                                    //print(try minTemp.text())
+                                }
+                                if let maxTemp: Element = try divs.getElementsByClass("maxTemp").first() {
+                                    dataMax.append(try maxTemp.text())
+                                    //print(try maxTemp.text())
+                                }
+                            }
+                           
+                            DispatchQueue.main.async {
+                               for _ in dataDay {
+                                   self.dia0.text = dataDay[0]
+                                   self.min0.text = dataMin[0]
+                                   self.max0.text = dataMax[0]
+
+                                   self.dia1.text = dataDay[1]
+                                   self.min1.text = dataMin[1]
+                                   self.max1.text = dataMax[1]
+
+                                   self.dia2.text = dataDay[2]
+                                   self.min2.text = dataMin[2]
+                                   self.max2.text = dataMax[2]
+
+                                   self.dia3.text = dataDay[3]
+                                   self.min3.text = dataMin[3]
+                                   self.max3.text = dataMax[3]
+
+                                   self.dia4.text = dataDay[4]
+                                   self.min4.text = dataMin[4]
+                                   self.max4.text = dataMax[4]
+
+                                   self.dia5.text = dataDay[5]
+                                   self.min5.text = dataMin[5]
+                                   self.max5.text = dataMax[5]
+
+                                   self.dia6.text = dataDay[6]
+                                   self.min6.text = dataMin[6]
+                                   self.max6.text = dataMax[6]
+                               }
+                            }
+                            
+                        } catch Exception.Error(type: let type, Message: let message) {
+                            print(type)
+                            print(message)
+                        } catch {
+                            print("")
+                        }
+                }
+            
+                task.resume()
+                
+            }    
 }
 
+
+extension WeatherViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last { //the .last should be the most accurate location  [CLLocation]
+            print(location)
+            locationManager.stopUpdatingLocation()
+            lat = String(location.coordinate.latitude)
+            lon = String(location.coordinate.longitude)
+            
+            //pega nome da cidade via coord
+            let latDouble = Double(self.lat)
+            let lonDouble = Double(self.lon)
+            self.weatherManager.fetchCityName(lat: latDouble!, lon: lonDouble!)
+            
+            raspagemHTML()
+            
+        } else {
+            print("nao pegou lat lon")
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print(error)
+    }
+}
+
+
+extension WeatherViewController: WeatherManagerDelegate {
+    func requestLocation() {
+        locationManager.requestLocation()
+    }    
+    
+    func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
+        DispatchQueue.main.async {
+            self.temperatureLabel.text = weather.temperatureString
+            self.conditionImageView.image = UIImage(systemName: weather.conditionName)
+            self.cityLabel.text = weather.cityName
+            self.lat = String(weather.lat)
+            self.lon = String(weather.lon)
+            
+            self.raspagemHTML()
+            print("print dispatch")
+        }
+    }
+    
+    func didFailWithError(error: Error) {
+        print(error)
+    }
+}

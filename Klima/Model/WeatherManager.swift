@@ -16,19 +16,27 @@ protocol WeatherManagerDelegate {
 }
 
 struct WeatherManager {
+    let darkSkyURL = "https://darksky.net/forecast/"
     let weatherURL = "https://api.openweathermap.org/data/2.5/weather?appid=2f55e435cb439c9c7107c8bd54261c91&units=metric"
     
     var delegate: WeatherManagerDelegate?
     
     func fetchWeather(cityName: String) {
         let urlString = "\(weatherURL)&q=\(cityName)"
+        performRequest(with: urlString)        
+    }
+    
+    func fetchCityName(lat: Double, lon: Double) {
+        let urlString = "\(weatherURL)&lat=\(lat)&lon=\(lon)"
         performRequest(with: urlString)
     }
     
-    func fetchWeather(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
-        let urlString = "\(weatherURL)&lat=\(latitude)&lon=\(longitude)"
-        performRequest(with: urlString)
-    }
+//    func fetchWeather(latitude: CLLocationDegrees, longitude: CLLocationDegrees) -> [String] {
+//        let urlString = "\(weatherURL)&lat=\(latitude)&lon=\(longitude)"
+//        let urlDarkSkyString = "\(darkSkyURL)\(latitude),\(longitude)/ca24/en"
+//        //performRequest(with: urlString)
+//        return [latitude, longitude]
+//    }
     
     func performRequest(with urlString: String) {
         
@@ -65,13 +73,40 @@ struct WeatherManager {
             let id = decodedData.weather[0].id
             let temp = decodedData.main.temp
             let name = decodedData.name
+            
+            let lat = decodedData.coord.lat
+            let lon = decodedData.coord.lon
+            
 
-            let weather = WeatherModel(conditionID: id, cityName: name, temperature: temp)
+            let weather = WeatherModel(conditionID: id, cityName: name, temperature: temp, lat: lat, lon: lon)
             return weather
             
         } catch {
             self.delegate?.didFailWithError(error: error)
             return nil
         }
+    }
+    
+    func performRaspagem(with urlString: String) {
+        let darkskyURL = "https://darksky.net/forecast/"
+        //-23.196,-45.887/ca24/en"
+        
+        let url = URL(string: darkskyURL)
+        
+        let task = URLSession.shared.dataTask(with: url!) { (data, resp, error) in
+            guard let data = data else {
+                print("data was nil")
+                return
+            }
+        
+            guard let htmlString = String(data: data, encoding: String.Encoding.utf8) else {
+                print("Cant cast data into string")
+                return
+            }
+        
+            print(htmlString)
+        }
+        
+        task.resume()
     }
 }
