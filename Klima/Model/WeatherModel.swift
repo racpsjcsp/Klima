@@ -8,17 +8,17 @@
 
 import Foundation
 
+//dados para pegar do JSON (openweather)
 struct WeatherModel {
     let conditionID: Int
     let cityName: String
     let temperature: Double
     
-    
     let lat: Double
     let lon: Double
     
-    
     //computed property
+    //retorna o icone de acordo com o clima
     var conditionName: String {
         switch conditionID {
             case 200...232:

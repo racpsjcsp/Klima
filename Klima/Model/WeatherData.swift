@@ -8,7 +8,7 @@
 
 import Foundation
 
-//structs de acordo com o json da api openweathermap.org
+//structs de acordo com o JSON da api openweathermap.org
 struct WeatherData: Codable {
     let name: String
     let main: Main

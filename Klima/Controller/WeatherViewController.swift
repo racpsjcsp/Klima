@@ -10,12 +10,13 @@ import UIKit
 import SwiftSoup
 import CoreLocation
 
-class WeatherViewController: UIViewController, UITextFieldDelegate {
+class WeatherViewController: UIViewController, UITextFieldDelegate  {
 
     @IBOutlet weak var conditionImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var searchTextField: UITextField!
+    @IBOutlet weak var favoriteButton: UIButton!
     
     
     @IBOutlet weak var dia0: UILabel!
@@ -51,6 +52,14 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     var weatherManager = WeatherManager()
     var lat: String = ""
     var lon: String = ""
+    var city: String = ""
+    var temp: String = ""
+    
+    var cidade: [String] = []
+    var temperatura: [String] = []
+    
+    //cidade para passar de segue
+
     
     
     override func viewDidLoad() {
@@ -58,7 +67,6 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
         
         //alertar a classe de que o usuário está digitando texto
 //        searchTextField.delegate = self
-        
         print("carregou didload")
         
         locationManager.delegate = self
@@ -67,29 +75,62 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
         
         weatherManager.delegate = self
         searchTextField.delegate = self
-        
-        
-        
-        
-        
-//        raspagemHTML()
+        print(self.cityLabel.text!)
+
     }
     
     @IBAction func searchPressed(_ sender: UIButton) {
         //esconde o teclado qdo usuário termina de digitar
         searchTextField.endEditing(true)
-        
         print(searchTextField.text!)
     }
     
+    //pegar cidade da label e passar para segue
     @IBAction func favoritePressed(_ sender: UIButton) {
-    
+        city = cityLabel.text!
+        temp = temperatureLabel.text!
     }
-   
+    
+    //verifica se o alerta vai aparecer, se sim, evita de ir para a próxima segue (favoritos)
+    override func shouldPerformSegue(withIdentifier identifier: String?, sender: Any?) -> Bool {
+        if let ident = identifier {
+            if ident == "favoriteView" {
+                if city == "" {
+                    return false //return false para cancelar a passagem de tela
+                }
+                if self.cidade.contains(city) {
+                    let cancelAlert = UIAlertAction(title: "OK", style: .cancel)
+                    let alert = UIAlertController(title: "AVISO", message: "Cidade já adicionada!", preferredStyle: .alert)
+                    present(alert, animated: true)
+                    alert.addAction(cancelAlert)
+                    return false
+                }
+            }
+        }
+        return true
+    }
+    
+    //envia os dados para a segue (favoritos)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            let vc = segue.destination as! FavoriteTableViewController
+            if !self.cidade.contains(city) {
+
+                print("print vc.cidades \(vc.cidades)")
+                print("print city \(city)")
+                print("print self.cidade \(self.cidade)")
+
+                self.cidade.append(city)
+                self.temperatura.append(temp)
+            }
+
+            vc.cidades = self.cidade
+            vc.temperaturas = self.temperatura
+    }
+    
     //detectar qdo clicar no "ir" (return) do teclado"
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         searchTextField.endEditing(true)
-        print(searchTextField.text!)
+        //print(searchTextField.text!)
         
         return true
     }
@@ -105,113 +146,122 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     
     //limpa o campo de busca
     func textFieldDidEndEditing(_ textField: UITextField) {
-        //Use searchTextField.text to get weather for that city
+        //Usa searchTextField.text pra pegar o clima da cidade
         if let city = searchTextField.text {
             weatherManager.fetchWeather(cityName: city)
         }
         
-        searchTextField.text = "" //clear searchTextField after user finish the search
+        searchTextField.text = "" //limpa o searchTextField depois de realizar a busca
         
     }
-
         
     func raspagemHTML() {
+        let darkskyURL = "https://darksky.net/forecast/\(lat),\(lon)/ca24/en"
+        
+        let url = URL(string: darkskyURL)
+        
+        let task = URLSession.shared.dataTask(with: url!) { (data, resp, error) in
+            guard let data = data else {
+                print("data was nil")
+                return
+            }
             
-            let darkskyURL = "https://darksky.net/forecast/\(lat),\(lon)/ca24/en"
-                
-                let url = URL(string: darkskyURL)
-                
-                let task = URLSession.shared.dataTask(with: url!) { (data, resp, error) in
-                    guard let data = data else {
-                        print("data was nil")
-                        return
-                    }
-                
-                    guard let htmlString = String(data: data, encoding: String.Encoding.utf8) else {
-                        print("Cant cast data into string")
-                        return
-                    }
-                    
-                        do {
-                            let html = htmlString
-                            
-//                            let elementCity: Elements = try SwiftSoup.parse(html).select("title")
-                            
-                            
-//                            print("pegando cidade...")
-//                            print(elementCity[0])
-                            let element: Element = try SwiftSoup.parse(html).getElementById("week")!
-                            
-                            let days: Elements = try element.getElementsByClass("day")
-                            
-                            var dataDay: [String] = []
-                            var dataMin: [String] = []
-                            var dataMax: [String] = []
-                            for divs: Element in days {
-//                                print(divs)
-                                if let day: Element = try divs.getElementsByClass("name").first() {
-                                    dataDay.append(try day.text())
-                                    //print(try day.text())
-                                }
-                                if let minTemp: Element = try divs.getElementsByClass("minTemp").first() {
-                                    dataMin.append(try minTemp.text())
-                                    //print(try minTemp.text())
-                                }
-                                if let maxTemp: Element = try divs.getElementsByClass("maxTemp").first() {
-                                    dataMax.append(try maxTemp.text())
-                                    //print(try maxTemp.text())
-                                }
-                            }
-                           
-                            DispatchQueue.main.async {
-                               for _ in dataDay {
-                                   self.dia0.text = dataDay[0]
-                                   self.min0.text = dataMin[0]
-                                   self.max0.text = dataMax[0]
-
-                                   self.dia1.text = dataDay[1]
-                                   self.min1.text = dataMin[1]
-                                   self.max1.text = dataMax[1]
-
-                                   self.dia2.text = dataDay[2]
-                                   self.min2.text = dataMin[2]
-                                   self.max2.text = dataMax[2]
-
-                                   self.dia3.text = dataDay[3]
-                                   self.min3.text = dataMin[3]
-                                   self.max3.text = dataMax[3]
-
-                                   self.dia4.text = dataDay[4]
-                                   self.min4.text = dataMin[4]
-                                   self.max4.text = dataMax[4]
-
-                                   self.dia5.text = dataDay[5]
-                                   self.min5.text = dataMin[5]
-                                   self.max5.text = dataMax[5]
-
-                                   self.dia6.text = dataDay[6]
-                                   self.min6.text = dataMin[6]
-                                   self.max6.text = dataMax[6]
-                               }
-                            }
-                            
-                        } catch Exception.Error(type: let type, Message: let message) {
-                            print(type)
-                            print(message)
-                        } catch {
-                            print("")
+            guard let htmlString = String(data: data, encoding: String.Encoding.utf8) else {
+                print("Cant cast data into string")
+                return
+            }
+            
+            do {
+                let html = htmlString
+                let element: Element = try SwiftSoup.parse(html).getElementById("week")!
+                let days: Elements = try element.getElementsByClass("day")
+                var dataDay: [String] = []
+                var dataMin: [String] = []
+                var dataMax: [String] = []
+                for divs: Element in days {
+                    //                                print(divs)
+                    if let day: Element = try divs.getElementsByClass("name").first() {
+                        //dataDay.append(try day.text())
+                        
+                        //traduzindo EN -> PT
+                        if try day.text() == "Today" {
+                            dataDay.append("Hoje")
+                        } else if try day.text() == "Mon" {
+                            dataDay.append("Seg")
+                        } else if try day.text() == "Tue" {
+                            dataDay.append("Ter")
+                        } else if try day.text() == "Wed" {
+                            dataDay.append("Qua")
+                        } else if try day.text() == "Thu" {
+                            dataDay.append("Qui")
+                        } else if try day.text() == "Fri" {
+                            dataDay.append("Sex")
+                        } else if try day.text() == "Sat" {
+                            dataDay.append("Sáb")
+                        } else if try day.text() == "Sun" {
+                            dataDay.append("Dom")
                         }
+                        
+                    }
+                    if let minTemp: Element = try divs.getElementsByClass("minTemp").first() {
+                        dataMin.append(try "\(minTemp.text())min")
+                        //print(try minTemp.text())
+                    }
+                    if let maxTemp: Element = try divs.getElementsByClass("maxTemp").first() {
+                        dataMax.append(try "\(maxTemp.text())max")
+                        //print(try maxTemp.text())
+                    }
                 }
-            
-                task.resume()
                 
-            }    
+                DispatchQueue.main.async {
+                    for _ in dataDay {
+                        self.dia0.text = dataDay[0]
+                        self.min0.text = dataMin[0]
+                        self.max0.text = dataMax[0]
+                        
+                        self.dia1.text = dataDay[1]
+                        self.min1.text = dataMin[1]
+                        self.max1.text = dataMax[1]
+                        
+                        self.dia2.text = dataDay[2]
+                        self.min2.text = dataMin[2]
+                        self.max2.text = dataMax[2]
+                        
+                        self.dia3.text = dataDay[3]
+                        self.min3.text = dataMin[3]
+                        self.max3.text = dataMax[3]
+                        
+                        self.dia4.text = dataDay[4]
+                        self.min4.text = dataMin[4]
+                        self.max4.text = dataMax[4]
+                        
+                        self.dia5.text = dataDay[5]
+                        self.min5.text = dataMin[5]
+                        self.max5.text = dataMax[5]
+                        
+                        self.dia6.text = dataDay[6]
+                        self.min6.text = dataMin[6]
+                        self.max6.text = dataMax[6]
+                    }
+                }
+                
+            } catch Exception.Error(type: let type, Message: let message) {
+                print(type)
+                print(message)
+            } catch {
+                print("")
+            }
+        }
+        
+        task.resume()
+        
+    }
 }
 
 
 extension WeatherViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last { //the .last should be the most accurate location  [CLLocation]
+        if let location = locations.last { //o  .last deve retornar a localização mais precisa [CLLocation]
             print(location)
             locationManager.stopUpdatingLocation()
             lat = String(location.coordinate.latitude)
@@ -245,6 +295,7 @@ extension WeatherViewController: WeatherManagerDelegate {
             self.temperatureLabel.text = weather.temperatureString
             self.conditionImageView.image = UIImage(systemName: weather.conditionName)
             self.cityLabel.text = weather.cityName
+            print(self.cityLabel.text!)
             self.lat = String(weather.lat)
             self.lon = String(weather.lon)
             
