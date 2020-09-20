@@ -58,6 +58,8 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
     var cidade: [String] = []
     var temperatura: [String] = []
     
+    var cidade_favorita = String()
+    
     //cidade para passar de segue
 
     
@@ -76,13 +78,13 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
         weatherManager.delegate = self
         searchTextField.delegate = self
         print(self.cityLabel.text!)
-
+        
     }
     
     @IBAction func searchPressed(_ sender: UIButton) {
         //esconde o teclado qdo usuário termina de digitar
         searchTextField.endEditing(true)
-        print(searchTextField.text!)
+        //print(searchTextField.text!)
     }
     
     //pegar cidade da label e passar para segue
@@ -94,13 +96,13 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
     //verifica se o alerta vai aparecer, se sim, evita de ir para a próxima segue (favoritos)
     override func shouldPerformSegue(withIdentifier identifier: String?, sender: Any?) -> Bool {
         if let ident = identifier {
-            if ident == "favoriteView" {
+            if ident == "addFavoriteView" {
                 if city == "" {
                     return false //return false para cancelar a passagem de tela
                 }
                 if self.cidade.contains(city) {
                     let cancelAlert = UIAlertAction(title: "OK", style: .cancel)
-                    let alert = UIAlertController(title: "AVISO", message: "Cidade já adicionada!", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Aviso", message: "Cidade já adicionada!", preferredStyle: .alert)
                     present(alert, animated: true)
                     alert.addAction(cancelAlert)
                     return false
@@ -112,19 +114,26 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
     
     //envia os dados para a segue (favoritos)
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "addFavoriteView" {
             let vc = segue.destination as! FavoriteTableViewController
-            if !self.cidade.contains(city) {
-
-                print("print vc.cidades \(vc.cidades)")
-                print("print city \(city)")
-                print("print self.cidade \(self.cidade)")
-
-                self.cidade.append(city)
-                self.temperatura.append(temp)
+            print("printando SEGUE.IDENTIFIER \(String(describing: segue.identifier))")
+            if self.cidade.contains("") {
+                self.cidade.remove(at: 0)
             }
+                if !self.cidade.contains(city) {
 
-            vc.cidades = self.cidade
-            vc.temperaturas = self.temperatura
+                   // print("print vc.cidades \(vc.cidades)")
+                   // print("print city \(city)")
+                    //print("print self.cidade \(self.cidade)")
+
+                    self.cidade.append(city)
+                    self.temperatura.append(temp)
+                }
+
+                vc.cidades = self.cidade
+                vc.temperaturas = self.temperatura
+        }        
     }
     
     //detectar qdo clicar no "ir" (return) do teclado"
@@ -155,7 +164,7 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
         
     }
         
-    func raspagemHTML() {
+    func raspagemDarkSky() {
         let darkskyURL = "https://darksky.net/forecast/\(lat),\(lon)/ca24/en"
         
         let url = URL(string: darkskyURL)
@@ -272,7 +281,7 @@ extension WeatherViewController: CLLocationManagerDelegate {
             let lonDouble = Double(self.lon)
             self.weatherManager.fetchCityName(lat: latDouble!, lon: lonDouble!)
             
-            raspagemHTML()
+            raspagemDarkSky()
             
         } else {
             print("nao pegou lat lon")
@@ -292,15 +301,18 @@ extension WeatherViewController: WeatherManagerDelegate {
     
     func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
         DispatchQueue.main.async {
-            self.temperatureLabel.text = weather.temperatureString
+            self.conditionImageView.isHidden = false
+            self.temperatureLabel.text = "\(weather.temperatureString)°C"
             self.conditionImageView.image = UIImage(systemName: weather.conditionName)
             self.cityLabel.text = weather.cityName
             print(self.cityLabel.text!)
             self.lat = String(weather.lat)
             self.lon = String(weather.lon)
             
-            self.raspagemHTML()
+            self.raspagemDarkSky()
             print("print dispatch")
+            
+            
         }
     }
     

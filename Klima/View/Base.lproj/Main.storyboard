@@ -44,7 +44,7 @@
                                                 <state key="normal" backgroundImage="plus" catalog="system"/>
                                                 <connections>
                                                     <action selector="favoritePressed:" destination="Q4c-eF-Ync" eventType="touchUpInside" id="sA6-X4-0ht"/>
-                                                    <segue destination="0hk-dz-W5s" kind="show" identifier="favoriteView" id="wMw-cf-sPh"/>
+                                                    <segue destination="0hk-dz-W5s" kind="show" identifier="addFavoriteView" id="wMw-cf-sPh"/>
                                                 </connections>
                                             </button>
                                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Procurar" textAlignment="right" clearsOnBeginEditing="YES" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="FLs-rY-TBK">
@@ -67,8 +67,8 @@
                                             </button>
                                         </subviews>
                                     </stackView>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sun.max" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="tct-y0-X69">
-                                        <rect key="frame" x="294" y="49.5" width="80" height="80.5"/>
+                                    <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sun.max" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="tct-y0-X69">
+                                        <rect key="frame" x="294" y="44.5" width="80" height="80.5"/>
                                         <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="80" id="ggC-wN-Vc2"/>
@@ -76,20 +76,20 @@
                                         </constraints>
                                     </imageView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pvH-Ns-Mde">
-                                        <rect key="frame" x="219" y="140" width="155" height="80"/>
+                                        <rect key="frame" x="193.5" y="50" width="180.5" height="80"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" text="21" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="alg-Gc-55b" userLabel="Temperature Label">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="alg-Gc-55b" userLabel="Temperature Label">
                                                 <rect key="frame" x="0.0" y="0.0" width="80.5" height="80"/>
                                                 <fontDescription key="fontDescription" type="system" weight="black" pointSize="69"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="°" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Dw-Cn-Ihc" userLabel="Temperature Label">
-                                                <rect key="frame" x="80.5" y="0.0" width="27.5" height="80"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Dw-Cn-Ihc" userLabel="Temperature Label">
+                                                <rect key="frame" x="80.5" y="0.0" width="50" height="80"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="70"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="C" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EII-wC-5F4" userLabel="Temperature Label">
-                                                <rect key="frame" x="108" y="0.0" width="47" height="80"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EII-wC-5F4" userLabel="Temperature Label">
+                                                <rect key="frame" x="130.5" y="0.0" width="50" height="80"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="70"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -99,7 +99,7 @@
                                         </constraints>
                                     </stackView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="utl-HA-8tS">
-                                        <rect key="frame" x="87" y="230" width="287" height="34"/>
+                                        <rect key="frame" x="87" y="140" width="287" height="124"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -349,7 +349,11 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="HvO-Oi-xlt"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Previsão" id="Bdq-No-O9O"/>
+                    <navigationItem key="navigationItem" title="Previsão" id="Bdq-No-O9O">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="line.horizontal.3" catalog="system" id="ksp-FL-bcI">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="cityLabel" destination="utl-HA-8tS" id="pqA-CU-Vcf"/>
                         <outlet property="conditionImageView" destination="tct-y0-X69" id="V3m-Gj-jHc"/>
@@ -381,7 +385,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9jQ-Cz-Ono" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2941" y="-1854"/>
+            <point key="canvasLocation" x="-2277" y="-1854"/>
         </scene>
         <!--Klima-->
         <scene sceneID="4gj-M8-D7A">
@@ -426,11 +430,13 @@
                     <navigationItem key="navigationItem" title="Klima" id="DQh-Rx-9ix"/>
                     <connections>
                         <outlet property="myTableView" destination="NE4-hA-73y" id="loS-qj-p8v"/>
+                        <segue destination="MNB-mz-LOg" kind="unwind" identifier="unwindFavorite" unwindAction="unwindToWeatherViewControllerWithSegue:" id="8lg-q1-oFs"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s7e-Ye-5L6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="MNB-mz-LOg" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="-2165.217391304348" y="-1854.2410714285713"/>
+            <point key="canvasLocation" x="-1484.057971014493" y="-1854.2410714285713"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="9Oh-qh-LUI">
@@ -453,11 +459,12 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Oyw-cF-O8l" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3820.289855072464" y="-1854.2410714285713"/>
+            <point key="canvasLocation" x="-3123" y="-1854"/>
         </scene>
     </scenes>
     <resources>
         <image name="exclamationmark.icloud" catalog="system" width="128" height="88"/>
+        <image name="line.horizontal.3" catalog="system" width="128" height="64"/>
         <image name="magnifyingglass" catalog="system" width="128" height="115"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="sun.max" catalog="system" width="128" height="124"/>
