@@ -33,6 +33,9 @@
                                                 </constraints>
                                                 <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 <state key="normal" backgroundImage="exclamationmark.icloud" catalog="system"/>
+                                                <connections>
+                                                    <segue destination="Ur7-bH-4PP" kind="show" identifier="viewAlerts" id="yaw-4U-m8h"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xch-Mv-m3j">
                                                 <rect key="frame" x="50" y="2" width="40" height="36"/>
@@ -330,6 +333,7 @@
                                         </subviews>
                                     </stackView>
                                 </subviews>
+                                <color key="backgroundColor" red="0.46202266219999999" green="0.83828371759999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="m5O-jM-ijj" secondAttribute="trailing" id="ffm-4E-0kJ"/>
                                     <constraint firstItem="m5O-jM-ijj" firstAttribute="leading" secondItem="uDr-Ao-iNi" secondAttribute="leading" id="wv8-Oa-jsw"/>
@@ -352,6 +356,9 @@
                     <navigationItem key="navigationItem" title="Previsão" id="Bdq-No-O9O">
                         <barButtonItem key="rightBarButtonItem" title="Item" image="line.horizontal.3" catalog="system" id="ksp-FL-bcI">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <segue destination="0hk-dz-W5s" kind="show" identifier="viewFavorites" id="Q76-YV-2lS"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
@@ -436,7 +443,42 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s7e-Ye-5L6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="MNB-mz-LOg" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="-1484.057971014493" y="-1854.2410714285713"/>
+            <point key="canvasLocation" x="-1497" y="-1854"/>
+        </scene>
+        <!--Table View Controller-->
+        <scene sceneID="lkJ-yc-3lQ">
+            <objects>
+                <tableViewController id="Ur7-bH-4PP" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="M8K-Lj-GOU">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="AN8-lz-sL7">
+                                <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="AN8-lz-sL7" id="jks-Bb-SON">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="Ur7-bH-4PP" id="CQ5-KC-tHQ"/>
+                            <outlet property="delegate" destination="Ur7-bH-4PP" id="MfM-VB-SeB"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="T8p-MN-tqE">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="line.horizontal.3" catalog="system" id="udU-eZ-k8l">
+                            <connections>
+                                <segue destination="0hk-dz-W5s" kind="show" id="iHh-Qi-0NH"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="imF-6R-sqT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2278" y="-1169"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="9Oh-qh-LUI">
@@ -462,6 +504,9 @@
             <point key="canvasLocation" x="-3123" y="-1854"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="Q76-YV-2lS"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="exclamationmark.icloud" catalog="system" width="128" height="88"/>
         <image name="line.horizontal.3" catalog="system" width="128" height="64"/>

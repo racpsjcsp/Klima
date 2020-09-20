@@ -47,23 +47,17 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
     @IBOutlet weak var min6: UILabel!
     @IBOutlet weak var max6: UILabel!
     
-//    var weatherManager = WeatherManager()
     let locationManager = CLLocationManager()
     var weatherManager = WeatherManager()
     var lat: String = ""
     var lon: String = ""
     var city: String = ""
     var temp: String = ""
-    
     var cidade: [String] = []
     var temperatura: [String] = []
     
     var cidade_favorita = String()
-    
-    //cidade para passar de segue
 
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -82,13 +76,10 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
     }
     
     @IBAction func searchPressed(_ sender: UIButton) {
-        //esconde o teclado qdo usuário termina de digitar
-        searchTextField.endEditing(true)
-        //print(searchTextField.text!)
+        searchTextField.endEditing(true) //esconde o teclado qdo usuário termina de digitar
     }
     
-    //pegar cidade da label e passar para segue
-    @IBAction func favoritePressed(_ sender: UIButton) {
+    @IBAction func favoritePressed(_ sender: UIButton) { //pegar cidade da label e passar para segue
         city = cityLabel.text!
         temp = temperatureLabel.text!
     }
@@ -112,9 +103,9 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
         return true
     }
     
+    
     //envia os dados para a segue (favoritos)
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         if segue.identifier == "addFavoriteView" {
             let vc = segue.destination as! FavoriteTableViewController
             print("printando SEGUE.IDENTIFIER \(String(describing: segue.identifier))")
@@ -122,25 +113,23 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
                 self.cidade.remove(at: 0)
             }
                 if !self.cidade.contains(city) {
-
-                   // print("print vc.cidades \(vc.cidades)")
-                   // print("print city \(city)")
-                    //print("print self.cidade \(self.cidade)")
-
                     self.cidade.append(city)
                     self.temperatura.append(temp)
                 }
-
                 vc.cidades = self.cidade
                 vc.temperaturas = self.temperatura
-        }        
+        }
+        
+        //guardando data ao clicar para visualizar os favoritos
+        if segue.identifier == "viewFavorites" {
+            let vc = segue.destination as! FavoriteTableViewController
+            vc.cidades = self.cidade
+        }
     }
     
     //detectar qdo clicar no "ir" (return) do teclado"
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         searchTextField.endEditing(true)
-        //print(searchTextField.text!)
-        
         return true
     }
     
@@ -159,27 +148,21 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
         if let city = searchTextField.text {
             weatherManager.fetchWeather(cityName: city)
         }
-        
         searchTextField.text = "" //limpa o searchTextField depois de realizar a busca
-        
     }
         
     func raspagemDarkSky() {
         let darkskyURL = "https://darksky.net/forecast/\(lat),\(lon)/ca24/en"
-        
         let url = URL(string: darkskyURL)
-        
         let task = URLSession.shared.dataTask(with: url!) { (data, resp, error) in
             guard let data = data else {
                 print("data was nil")
                 return
             }
-            
             guard let htmlString = String(data: data, encoding: String.Encoding.utf8) else {
                 print("Cant cast data into string")
                 return
             }
-            
             do {
                 let html = htmlString
                 let element: Element = try SwiftSoup.parse(html).getElementById("week")!
@@ -188,9 +171,7 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
                 var dataMin: [String] = []
                 var dataMax: [String] = []
                 for divs: Element in days {
-                    //                                print(divs)
                     if let day: Element = try divs.getElementsByClass("name").first() {
-                        //dataDay.append(try day.text())
                         
                         //traduzindo EN -> PT
                         if try day.text() == "Today" {
@@ -210,15 +191,12 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
                         } else if try day.text() == "Sun" {
                             dataDay.append("Dom")
                         }
-                        
                     }
                     if let minTemp: Element = try divs.getElementsByClass("minTemp").first() {
                         dataMin.append(try "\(minTemp.text())min")
-                        //print(try minTemp.text())
                     }
                     if let maxTemp: Element = try divs.getElementsByClass("maxTemp").first() {
                         dataMax.append(try "\(maxTemp.text())max")
-                        //print(try maxTemp.text())
                     }
                 }
                 
@@ -261,12 +239,9 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
                 print("")
             }
         }
-        
         task.resume()
-        
     }
 }
-
 
 extension WeatherViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -293,7 +268,6 @@ extension WeatherViewController: CLLocationManagerDelegate {
     }
 }
 
-
 extension WeatherViewController: WeatherManagerDelegate {
     func requestLocation() {
         locationManager.requestLocation()
@@ -305,14 +279,10 @@ extension WeatherViewController: WeatherManagerDelegate {
             self.temperatureLabel.text = "\(weather.temperatureString)°C"
             self.conditionImageView.image = UIImage(systemName: weather.conditionName)
             self.cityLabel.text = weather.cityName
-            print(self.cityLabel.text!)
+            //print(self.cityLabel.text!)
             self.lat = String(weather.lat)
             self.lon = String(weather.lon)
-            
             self.raspagemDarkSky()
-            print("print dispatch")
-            
-            
         }
     }
     

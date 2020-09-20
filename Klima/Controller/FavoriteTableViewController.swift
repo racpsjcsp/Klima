@@ -21,12 +21,9 @@ class FavoriteTableViewController: UITableViewController {
         
         myTableView.dataSource = self
         myTableView.delegate = self
-        
-        //print("print lista favoritos")
-        //print(cidades)
+
     }
-    
-    //unwind
+
 
     //MARK - Tableview Datasource Methods
     
@@ -38,8 +35,6 @@ class FavoriteTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteItemCell", for: indexPath)
         cell.textLabel?.text = cidades[indexPath.row]
-        //print("printando cellForRowAt \(cell.textLabel!.text!)")
-        //cell.detailTextLabel?.text = temperaturas[indexPath.row]
         return cell
     }
     
@@ -49,14 +44,11 @@ class FavoriteTableViewController: UITableViewController {
         
         cellPressed = cell.textLabel!.text!
         performSegue(withIdentifier: "unwindFavorite", sender: cell)
-        //print("cheguei no performSegue")
-        //print("printando didSelectRowAT \(cellPressed)")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
        print("print dentro do prepare")
        let vc = segue.destination as! WeatherViewController
-//       let cidade_clicada = cellPressed
        vc.cidade_favorita = cellPressed
     }
 }
@@ -65,8 +57,6 @@ class FavoriteTableViewController: UITableViewController {
 //unwind para a VC desejada
 extension WeatherViewController {
     @IBAction func unwindToWeatherViewController(segue: UIStoryboardSegue) {
-        print("print dentro do unwind")
-        print("print cidade_favorita da extension \(cidade_favorita)")
         weatherManager.fetchWeather(cityName: cidade_favorita)
     }
 }

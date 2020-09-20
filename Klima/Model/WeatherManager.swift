@@ -30,21 +30,11 @@ struct WeatherManager {
         let urlString = "\(weatherURL)&lat=\(lat)&lon=\(lon)"
         performRequest(with: urlString)
     }
-    
-//    func fetchWeather(latitude: CLLocationDegrees, longitude: CLLocationDegrees) -> [String] {
-//        let urlString = "\(weatherURL)&lat=\(latitude)&lon=\(longitude)"
-//        let urlDarkSkyString = "\(darkSkyURL)\(latitude),\(longitude)/ca24/en"
-//        //performRequest(with: urlString)
-//        return [latitude, longitude]
-//    }
+
     
     func performRequest(with urlString: String) {
-        
-        //1 - cria a URL
-        if let url = URL(string: urlString) {
-            
-            //2  - cria a URLSession
-            let session = URLSession(configuration: .default)
+        if let url = URL(string: urlString) { //1 - cria a URL
+            let session = URLSession(configuration: .default) //2  - cria a URLSession
             
             //3 - atribui uma tarefa para a session
             let task = session.dataTask(with: url) { (data, response, error) in
@@ -52,14 +42,12 @@ struct WeatherManager {
                     self.delegate?.didFailWithError(error: error!)
                     return
                 }
-                
                 if let safeData = data {
                     if let weather = self.parseJSON(weatherData: safeData) {
                         self.delegate?.didUpdateWeather(self, weather: weather)
-                    } //dentro de uma closure, precisa de self.
+                    }   //dentro de uma closure, precisa de self.
                 }
             }
-            
             //4 - inicia a tarefa
             task.resume()
         }
@@ -73,13 +61,10 @@ struct WeatherManager {
             let id = decodedData.weather[0].id
             let temp = decodedData.main.temp
             let name = decodedData.name
-            
             let lat = decodedData.coord.lat
             let lon = decodedData.coord.lon
-
             let weather = WeatherModel(conditionID: id, cityName: name, temperature: temp, lat: lat, lon: lon)
             return weather
-            
         } catch {
             self.delegate?.didFailWithError(error: error)
             return nil
