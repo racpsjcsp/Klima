@@ -54,7 +54,7 @@ class FavoriteTableViewController: UITableViewController {
 }
 
 
-//unwind para a VC desejada
+//unwind para a VC desejada com a cidade 
 extension WeatherViewController {
     @IBAction func unwindToWeatherViewController(segue: UIStoryboardSegue) {
         weatherManager.fetchWeather(cityName: cidade_favorita)

@@ -23,7 +23,8 @@ struct WeatherManager {
     
     func fetchWeather(cityName: String) {
         let urlString = "\(weatherURL)&q=\(cityName)"
-        performRequest(with: urlString)        
+        //possibilitar query de nomes com espaço/acentuação
+        performRequest(with:  urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
     }
     
     func fetchCityName(lat: Double, lon: Double) {

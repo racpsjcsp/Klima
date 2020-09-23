@@ -17,8 +17,8 @@
 		4639943325019376006ED84E /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4639943225019376006ED84E /* WeatherManager.swift */; };
 		46399435250193A3006ED84E /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46399434250193A3006ED84E /* WeatherModel.swift */; };
 		4639943725019423006ED84E /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4639943625019423006ED84E /* WeatherData.swift */; };
-		4639943B2501AB3C006ED84E /* LocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4639943A2501AB3C006ED84E /* LocationModel.swift */; };
 		46399460250445B0006ED84E /* Raspagem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4639945F250445B0006ED84E /* Raspagem.swift */; };
+		469BA55F251ACC40008D325D /* AlertaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469BA55E251ACC40008D325D /* AlertaModel.swift */; };
 		46C53A31250AA2D90049F753 /* Favorito.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C53A30250AA2D90049F753 /* Favorito.swift */; };
 		46C53A3B250AB0040049F753 /* FavoriteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C53A3A250AB0040049F753 /* FavoriteTableViewController.swift */; };
 		46F443F125178860009454DE /* AlertTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F443F025178860009454DE /* AlertTableViewController.swift */; };
@@ -39,8 +39,8 @@
 		4639943225019376006ED84E /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
 		46399434250193A3006ED84E /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 		4639943625019423006ED84E /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
-		4639943A2501AB3C006ED84E /* LocationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationModel.swift; sourceTree = "<group>"; };
 		4639945F250445B0006ED84E /* Raspagem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Raspagem.swift; sourceTree = "<group>"; };
+		469BA55E251ACC40008D325D /* AlertaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertaModel.swift; sourceTree = "<group>"; };
 		46C53A30250AA2D90049F753 /* Favorito.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Favorito.swift; sourceTree = "<group>"; };
 		46C53A3A250AB0040049F753 /* FavoriteTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewController.swift; sourceTree = "<group>"; };
 		46F443F025178860009454DE /* AlertTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertTableViewController.swift; sourceTree = "<group>"; };
@@ -119,9 +119,9 @@
 				4639943225019376006ED84E /* WeatherManager.swift */,
 				46399434250193A3006ED84E /* WeatherModel.swift */,
 				4639943625019423006ED84E /* WeatherData.swift */,
-				4639943A2501AB3C006ED84E /* LocationModel.swift */,
 				4639945F250445B0006ED84E /* Raspagem.swift */,
 				46C53A30250AA2D90049F753 /* Favorito.swift */,
+				469BA55E251ACC40008D325D /* AlertaModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -262,8 +262,8 @@
 				4639941B25018371006ED84E /* WeatherViewController.swift in Sources */,
 				46399435250193A3006ED84E /* WeatherModel.swift in Sources */,
 				46F443F125178860009454DE /* AlertTableViewController.swift in Sources */,
-				4639943B2501AB3C006ED84E /* LocationModel.swift in Sources */,
 				46C53A3B250AB0040049F753 /* FavoriteTableViewController.swift in Sources */,
+				469BA55F251ACC40008D325D /* AlertaModel.swift in Sources */,
 				4639941725018371006ED84E /* AppDelegate.swift in Sources */,
 				4639941925018371006ED84E /* SceneDelegate.swift in Sources */,
 				4639943725019423006ED84E /* WeatherData.swift in Sources */,

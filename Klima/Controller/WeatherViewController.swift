@@ -11,7 +11,7 @@ import SwiftSoup
 import CoreLocation
 
 class WeatherViewController: UIViewController, UITextFieldDelegate  {
-
+    
     @IBOutlet weak var conditionImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
@@ -61,6 +61,8 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        reshapeLabel()
+        
         //alertar a classe de que o usuário está digitando texto
 //        searchTextField.delegate = self
         print("carregou didload")
@@ -83,6 +85,21 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
         city = cityLabel.text!
         temp = temperatureLabel.text!
     }
+    
+    func reshapeLabel() {
+//     dia0     min0     max0
+//        dia0.layer.borderWidth = 4
+//        cityLabel.backgroundColor = .brown
+//        dia0.layer.cornerRadius = 25
+        
+        
+        
+    }
+    
+    
+    
+    
+    
     
     //verifica se o alerta vai aparecer, se sim, evita de ir para a próxima segue (favoritos)
     override func shouldPerformSegue(withIdentifier identifier: String?, sender: Any?) -> Bool {
@@ -123,7 +140,9 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
         //guardando data ao clicar para visualizar os favoritos
         if segue.identifier == "viewFavorites" {
             let vc = segue.destination as! FavoriteTableViewController
+            
             vc.cidades = self.cidade
+            
         }
     }
     
@@ -241,6 +260,9 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
         }
         task.resume()
     }
+    
+    
+    
 }
 
 extension WeatherViewController: CLLocationManagerDelegate {
@@ -289,4 +311,7 @@ extension WeatherViewController: WeatherManagerDelegate {
     func didFailWithError(error: Error) {
         print(error)
     }
+    
+   
+    
 }
