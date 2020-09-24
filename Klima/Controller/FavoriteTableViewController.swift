@@ -10,6 +10,7 @@ import UIKit
 
 class FavoriteTableViewController: UITableViewController {
 
+   
     @IBOutlet weak var myTableView: UITableView!
     
     var cidades: [String] = []
@@ -21,14 +22,12 @@ class FavoriteTableViewController: UITableViewController {
         
         myTableView.dataSource = self
         myTableView.delegate = self
-
     }
 
 
     //MARK - Tableview Datasource Methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
         return cidades.count
     }
     
@@ -51,6 +50,24 @@ class FavoriteTableViewController: UITableViewController {
        let vc = segue.destination as! WeatherViewController
        vc.cidade_favorita = cellPressed
     }
+    
+    
+    @IBAction func addCidadePressed(_ sender: UIBarButtonItem) {
+        var textField = UITextField()
+        let alert = UIAlertController(title: "Adicionar Nova Cidade", message: "", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Adicionar Item", style: .default) { (action) in
+            //add cidade na lista depois que o usuario clicar em ADD
+            self.cidades.append(textField.text!)
+            self.tableView.reloadData()
+        }
+        alert.addTextField { (alertTextField) in
+            alertTextField.placeholder = "Adicionar uma nova cidade"
+            textField = alertTextField
+        }
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
+        
 }
 
 

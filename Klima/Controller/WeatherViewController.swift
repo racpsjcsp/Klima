@@ -91,14 +91,7 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
 //        dia0.layer.borderWidth = 4
 //        cityLabel.backgroundColor = .brown
 //        dia0.layer.cornerRadius = 25
-        
-        
-        
     }
-    
-    
-    
-    
     
     
     //verifica se o alerta vai aparecer, se sim, evita de ir para a próxima segue (favoritos)
@@ -120,7 +113,6 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
         return true
     }
     
-    
     //envia os dados para a segue (favoritos)
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "addFavoriteView" {
@@ -140,9 +132,7 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
         //guardando data ao clicar para visualizar os favoritos
         if segue.identifier == "viewFavorites" {
             let vc = segue.destination as! FavoriteTableViewController
-            
             vc.cidades = self.cidade
-            
         }
     }
     
@@ -221,6 +211,7 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
                 
                 DispatchQueue.main.async {
                     for _ in dataDay {
+                 
                         self.dia0.text = dataDay[0]
                         self.min0.text = dataMin[0]
                         self.max0.text = dataMax[0]
@@ -259,9 +250,7 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
             }
         }
         task.resume()
-    }
-    
-    
+    }    
     
 }
 

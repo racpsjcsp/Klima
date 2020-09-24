@@ -366,7 +366,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Previsão" id="Bdq-No-O9O">
                         <barButtonItem key="rightBarButtonItem" title="Item" image="line.horizontal.3" catalog="system" id="ksp-FL-bcI">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <segue destination="0hk-dz-W5s" kind="show" identifier="viewFavorites" id="Q76-YV-2lS"/>
                             </connections>
@@ -405,14 +405,14 @@
             </objects>
             <point key="canvasLocation" x="-2278.2608695652175" y="-1854.2410714285713"/>
         </scene>
-        <!--Klima-->
+        <!--Favoritos-->
         <scene sceneID="4gj-M8-D7A">
             <objects>
                 <tableViewController id="0hk-dz-W5s" customClass="FavoriteTableViewController" customModule="Klima" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="NE4-hA-73y">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.47684186699999997" green="0.50480759139999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <color key="sectionIndexColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="sectionIndexBackgroundColor" red="0.47684186699999997" green="0.50480759139999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
@@ -440,7 +440,6 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
-                                <color key="backgroundColor" red="1" green="0.83234566450000003" blue="0.47320586440000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableViewCell>
                         </prototypes>
@@ -449,7 +448,13 @@
                             <outlet property="delegate" destination="0hk-dz-W5s" id="O0b-C6-EWY"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Klima" id="DQh-Rx-9ix"/>
+                    <navigationItem key="navigationItem" title="Favoritos" largeTitleDisplayMode="always" id="DQh-Rx-9ix">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="plus" catalog="system" id="uL7-7V-H0B">
+                            <connections>
+                                <action selector="addCidadePressed:" destination="0hk-dz-W5s" id="1gt-po-nuq"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="myTableView" destination="NE4-hA-73y" id="loS-qj-p8v"/>
                         <segue destination="MNB-mz-LOg" kind="unwind" identifier="unwindFavorite" unwindAction="unwindToWeatherViewControllerWithSegue:" id="8lg-q1-oFs"/>
@@ -486,13 +491,14 @@
                             </constraints>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="AlertCell" rowHeight="40" id="AN8-lz-sL7">
-                                <rect key="frame" x="0.0" y="128" width="414" height="40"/>
+                            <tableViewCell clipsSubviews="YES" tag="1" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="AlertCell" rowHeight="50" id="AN8-lz-sL7">
+                                <rect key="frame" x="0.0" y="128" width="414" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="AN8-lz-sL7" id="jks-Bb-SON">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="40"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -502,6 +508,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Alertas" id="T8p-MN-tqE">
                         <barButtonItem key="rightBarButtonItem" title="Item" image="line.horizontal.3" catalog="system" id="udU-eZ-k8l">
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <segue destination="0hk-dz-W5s" kind="show" identifier="viewFavoritesFromAlerts" id="iHh-Qi-0NH"/>
                             </connections>
@@ -523,11 +530,6 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="uM3-ae-WbO">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="barTintColor" red="0.47684186699999997" green="0.50480759139999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <textAttributes key="titleTextAttributes">
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -540,7 +542,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Q76-YV-2lS"/>
+        <segue reference="wMw-cf-sPh"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="alert-banner" width="474" height="67"/>
