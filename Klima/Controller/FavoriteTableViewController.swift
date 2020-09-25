@@ -12,6 +12,7 @@ class FavoriteTableViewController: UITableViewController {
 
    
     @IBOutlet weak var myTableView: UITableView!
+    var textField = UITextField()
     
     var cidades: [String] = []
     var temperaturas: [String] = []
@@ -22,8 +23,10 @@ class FavoriteTableViewController: UITableViewController {
         
         myTableView.dataSource = self
         myTableView.delegate = self
+        print("print no didLoad: \(cidades)")
     }
 
+    
 
     //MARK - Tableview Datasource Methods
     
@@ -48,24 +51,29 @@ class FavoriteTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
        print("print dentro do prepare")
        let vc = segue.destination as! WeatherViewController
-       vc.cidade_favorita = cellPressed
+        
+        vc.cidade_favorita = cellPressed
+        vc.cidade.append(textField.text!)
+        
     }
     
     
     @IBAction func addCidadePressed(_ sender: UIBarButtonItem) {
-        var textField = UITextField()
+        
         let alert = UIAlertController(title: "Adicionar Nova Cidade", message: "", preferredStyle: .alert)
-        let action = UIAlertAction(title: "Adicionar Item", style: .default) { (action) in
+        let action = UIAlertAction(title: "Adicionar Cidade", style: .default) { (action) in
             //add cidade na lista depois que o usuario clicar em ADD
-            self.cidades.append(textField.text!)
+            self.cidades.append(self.textField.text!)
             self.tableView.reloadData()
+            print("print qdo adiciona: \(self.cidades)")
         }
         alert.addTextField { (alertTextField) in
             alertTextField.placeholder = "Adicionar uma nova cidade"
-            textField = alertTextField
+            self.textField = alertTextField
         }
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
+        print("print no final do alerta \(cidades)")
     }
         
 }
@@ -75,5 +83,6 @@ class FavoriteTableViewController: UITableViewController {
 extension WeatherViewController {
     @IBAction func unwindToWeatherViewController(segue: UIStoryboardSegue) {
         weatherManager.fetchWeather(cityName: cidade_favorita)
+        print("print da unwindo qdo volta \(cidade_favorita)")
     }
 }

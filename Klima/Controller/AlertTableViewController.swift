@@ -13,9 +13,6 @@ class AlertTableViewController: UITableViewController {
     
     @IBOutlet weak var myTableView: UITableView!
     
-    
-    
-    
     var cidades: [String] = []
     
     var alertas: [String] = []
@@ -35,6 +32,14 @@ class AlertTableViewController: UITableViewController {
                          "Santa Catarina (SC)", "São Paulo (SP)", "Sergipe (SE)", "Tocantins (TO)"]
     
     let textAlertas = ["chuva", "granizo", "furacão", "neve", "nevasca", "tornado"]
+    let textAlertas2 = ["teste1", "abcde", "12345"]
+    let textAlertas3 = ["!@#$%"]
+    
+    let array2D = [
+        ["chuva", "granizo", "furacão", "neve", "nevasca", "tornado"],
+        ["teste1", "abcde", "12345"],
+        ["!@#$%"]
+    ]
     
     
     override func viewDidLoad() {
@@ -47,29 +52,30 @@ class AlertTableViewController: UITableViewController {
         
         raspagemAlerta()
         
+        
     }
     
     // MARK: - Table view data source
     
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
+
         
-        //vai depender da raspagem dos alertas?
-        return textAlertas.count
+        
+        return array2D[section].count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellName, for: indexPath)
-        let text = textAlertas[indexPath.row]
+        let text = array2D[indexPath.section][indexPath.row]
         
         cell.backgroundColor = .green
-        cell.textLabel?.text = text
+        cell.textLabel?.text = "-- \(text) Section:\(indexPath.section) -- Row:\(indexPath.row)"
         return cell
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return headerEstados.count
+        return array2D.count
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
