@@ -173,10 +173,9 @@ class AlertTableViewController: UITableViewController {
         }
     }
     
+    //MARK: - Raspagem Alertas
     
     
-    
-    //MARK: - Populating Cells (scrap data)
     
     
 }
@@ -184,3 +183,9 @@ class AlertTableViewController: UITableViewController {
 
 
 
+extension Sequence where Iterator.Element: Hashable {
+    func unique() -> [Iterator.Element] {
+        var seen: Set<Iterator.Element> = []
+        return filter { seen.insert($0).inserted }
+    }
+}

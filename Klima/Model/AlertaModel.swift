@@ -11,5 +11,10 @@ import Foundation
 struct AlertaModel {
     let estado: String
     let alerta: [String]
+    
+    init(estado: String, alerta: [String]) {
+        self.estado = estado
+        self.alerta = alerta
+    }
 }
 

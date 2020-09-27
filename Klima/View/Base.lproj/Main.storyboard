@@ -453,6 +453,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="backButton" destination="DQh-Rx-9ix" id="5y4-B2-jJ8"/>
                         <outlet property="myTableView" destination="NE4-hA-73y" id="loS-qj-p8v"/>
                         <segue destination="MNB-mz-LOg" kind="unwind" identifier="unwindFavorite" unwindAction="unwindToWeatherViewControllerWithSegue:" id="8lg-q1-oFs"/>
                     </connections>
@@ -539,7 +540,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="wMw-cf-sPh"/>
+        <segue reference="iHh-Qi-0NH"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="alert-banner" width="474" height="67"/>

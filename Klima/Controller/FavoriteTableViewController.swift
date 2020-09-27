@@ -12,6 +12,8 @@ class FavoriteTableViewController: UITableViewController {
 
    
     @IBOutlet weak var myTableView: UITableView!
+    @IBOutlet weak var backButton: UINavigationItem!
+    
     var textField = UITextField()
     
     var cidades: [String] = []
@@ -49,33 +51,44 @@ class FavoriteTableViewController: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-       print("print dentro do prepare")
-       let vc = segue.destination as! WeatherViewController
-        
+      
+        let vc = segue.destination as! WeatherViewController
         vc.cidade_favorita = cellPressed
-        vc.cidade.append(textField.text!)
         
+        //para não adicionar string vazia no array
+        if !vc.cidade.contains(cellPressed) {
+            vc.cidade.append(textField.text!)
+        }
     }
+    
+    
+    
     
     
     @IBAction func addCidadePressed(_ sender: UIBarButtonItem) {
-        
+        //cria o alerta
         let alert = UIAlertController(title: "Adicionar Nova Cidade", message: "", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancelar", style: .cancel) { (action:UIAlertAction!) in }
+            //adiciona a ação de cancelar no alerta
+            alert.addAction(cancelAction)
+                
         let action = UIAlertAction(title: "Adicionar Cidade", style: .default) { (action) in
-            //add cidade na lista depois que o usuario clicar em ADD
-            self.cidades.append(self.textField.text!)
-            self.tableView.reloadData()
-            print("print qdo adiciona: \(self.cidades)")
+            //add cidade na lista depois que o usuario clicar em ADD e não está na lista ainda
+            if !self.cidades.contains(self.textField.text!) {
+                self.cidades.append(self.textField.text!)
+                self.tableView.reloadData()
+            }
+            
         }
         alert.addTextField { (alertTextField) in
-            alertTextField.placeholder = "Adicionar uma nova cidade"
+            alertTextField.placeholder = "Cidade"
             self.textField = alertTextField
         }
+        //adiciona a ação no alerta
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
-        print("print no final do alerta \(cidades)")
-    }
-        
+    }        
 }
 
 
