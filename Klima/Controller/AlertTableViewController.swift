@@ -17,8 +17,7 @@ class AlertTableViewController: UITableViewController {
     
     var alertas: [String] = []
     
-    var estadoLista: [AlertaModel] = []
-    
+    var estadoLista = [AlertaModel]()
     
     let cellName = "AlertCell"
     
@@ -31,25 +30,11 @@ class AlertTableViewController: UITableViewController {
                          "Rio Grande do Sul (RS)", "Rondônia (RO)", "Roraima (RR)",
                          "Santa Catarina (SC)", "São Paulo (SP)", "Sergipe (SE)", "Tocantins (TO)"]
     
-    let textAlertas = ["chuva", "granizo", "furacão", "neve", "nevasca", "tornado"]
-    let textAlertas2 = ["teste1", "abcde", "12345"]
-    let textAlertas3 = ["!@#$%"]
-    
-    let array2D = [
-        ["chuva", "granizo", "furacão", "neve", "nevasca", "tornado"],
-        ["teste1", "abcde", "12345"],
-        ["!@#$%"]
-    ]
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.prefersLargeTitles = true
+        
         myTableView.delegate = self
         myTableView.dataSource = self
-        
-        //        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellName)
-        
         raspagemAlerta()
         
         
@@ -57,33 +42,31 @@ class AlertTableViewController: UITableViewController {
     
     // MARK: - Table view data source
     
-    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-        
-        
-        return array2D[section].count
+        return estadoLista[section].alerta.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellName, for: indexPath)
-        let text = array2D[indexPath.section][indexPath.row]
-        
+        let text = estadoLista[indexPath.section].alerta[indexPath.row]
         cell.backgroundColor = .green
-        cell.textLabel?.text = "-- \(text) Section:\(indexPath.section) -- Row:\(indexPath.row)"
+        cell.textLabel?.text = text
         return cell
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return array2D.count
+        return estadoLista.count
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return headerEstados[section]
+        //comparando listas para decidir quais estados exibir baseando se tem alerta ou não
+        for item in headerEstados {
+            if item.lowercased().contains(estadoLista[section].estado.lowercased()) {
+                return item
+            }
+        }
+        return nil
     }
-    
-    
-    
     
     //ir para tela de favoritos a partir da tela de alerta
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
@@ -91,7 +74,6 @@ class AlertTableViewController: UITableViewController {
             return false
         }
         return true
-        
     }
     
     
@@ -112,59 +94,62 @@ class AlertTableViewController: UITableViewController {
             let html = htmlString
             
             self.raspagemEstados(divId: "estados_quadro2_barra_main1", estados: "estados_quadro2_nome_paises", html: html)
-            
             self.raspagemEstados(divId: "estados_quadro2_barra_main2", estados: "estados_quadro2_nome_paises", html: html)
             self.raspagemEstados(divId: "estados_quadro2_barra_main3", estados: "estados_quadro2_nome_paises", html: html)
             
-            print(self.estadoLista)
-            
-            
             DispatchQueue.main.async {
-                
+                self.estadoLista = self.estadoLista.sorted {
+                    $0.estado < $1.estado
+                }
+                self.tableView.reloadData()
             }
         }
         task.resume()
     }
-    
-    
+        
     func raspagemEstados(divId: String, estados: String, html: String) {
         do {
             
             let doc: Element = try SwiftSoup.parse(html).getElementById(divId)!
-            
             let div1: Elements = try doc.select("div")
             var estadosPossiveis: [String] = []
             
             for divEstado: Element in div1.array() {
-                
                 var estado = ""
-                var existe: Bool = false
-                if let teste: Element = try divEstado.getElementById(estados) {
-                    estado = try teste.attr("title")
-                    if estadosPossiveis.contains(estado) {
-                        existe = true
-                    } else {
+                
+                if let titulo: Element = try divEstado.getElementById(estados) {
+                    estado = try titulo.attr("title")
+                    if !estadosPossiveis.contains(estado) {
                         estadosPossiveis.append(estado)
-                    }
-                }
-                var alertas: [String] = []
-                
-                let link: Elements = try divEstado.select("a[href]")
-                for i in link {
-                    let atributo: Elements = try i.getElementsByAttribute("title")
-                    for j in atributo {
-                        alertas.append(try j.attr("title"))
+                        var alertas: [String] = []
+                        //raspagem das linhas cinza1
+                        if let divLinha: Element = try divEstado.getElementById("estados_quadro2_barra_cinza1") {
+                            let link: Elements = try divLinha.select("a[href]")
+                            for i in link {
+                                let atributo: Elements = try i.getElementsByAttribute("title")
+                                for j in atributo {
+                                    alertas.append(try j.attr("title"))
+                                }
+                            }
+                        //raspagem das linhas cinza2
+                        } else if let divLinha: Element = try divEstado.getElementById("estados_quadro2_barra_cinza2") {
+                            let link: Elements = try divLinha.select("a[href]")
+                            for i in link {
+                                let atributo: Elements = try i.getElementsByAttribute("title")
+                                for j in atributo {
+                                    alertas.append(try j.attr("title"))
+                                }
+                            }
+                        }
                         
+                        let alerta = AlertaModel(estado: estado, alerta: alertas)
+                        if estado != "" && alertas.count > 0 {
+                            self.estadoLista.append(alerta)
+                        }
                     }
-                }
-                
-                let alerta = AlertaModel(estado: estado, alerta: alertas)
-                
-                if estado != "" && !existe {
-                    self.estadoLista.append(alerta)
                 }
             }
-            
+
         } catch Exception.Error(type: let type, Message: let message) {
             print(type)
             print(message)
@@ -172,16 +157,9 @@ class AlertTableViewController: UITableViewController {
             print("")
         }
     }
-    
-    //MARK: - Raspagem Alertas
-    
-    
-    
-    
 }
 
-
-
+//MARK: - Extensions
 
 extension Sequence where Iterator.Element: Hashable {
     func unique() -> [Iterator.Element] {
