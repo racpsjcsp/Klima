@@ -49,10 +49,16 @@ class AlertTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellName, for: indexPath)
         let text = estadoLista[indexPath.section].alerta[indexPath.row]
-        cell.backgroundColor = .green
+        
         cell.textLabel?.text = text
+        cell.textLabel?.textColor = .white
+        cell.textLabel?.font = .italicSystemFont(ofSize: 16)
         return cell
     }
+   
+    
+    
+    
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return estadoLista.count
@@ -67,6 +73,8 @@ class AlertTableViewController: UITableViewController {
         }
         return nil
     }
+    
+
     
     //ir para tela de favoritos a partir da tela de alerta
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {

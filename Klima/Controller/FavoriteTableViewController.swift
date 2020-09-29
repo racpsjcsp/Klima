@@ -11,24 +11,25 @@ import UIKit
 class FavoriteTableViewController: UITableViewController {
    
     @IBOutlet weak var myTableView: UITableView!
-    @IBOutlet weak var backButton: UINavigationItem!
     
     var defaults = UserDefaults.standard
     
     var textField = UITextField()
     
+    var cidade: [String] = []
     var cidades: [String] = []
     var temperaturas: [String] = []
-    var cellPressed: String = ""
+//    var cellPressed: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if let item = defaults.array(forKey: "ListaFavoritos") as? [String] {
-            cidades = item
+                
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
+        
+        if let cidadesDefaults = defaults.array(forKey: "ListaFavoritos") as? [String] {
+            cidades = cidadesDefaults
         }
         self.tableView.reloadData()
-
     }
     
     //MARK - Tableview Datasource Methods
@@ -46,22 +47,46 @@ class FavoriteTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
+        defaults.set(cell.textLabel!.text!, forKey: "CidadeFavoritaClicada")
+//        cellPressed = cell.textLabel!.text!
         
-        cellPressed = cell.textLabel!.text!
         performSegue(withIdentifier: "unwindFavorite", sender: cell)
+    }    
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-      
-        let vc = segue.destination as! WeatherViewController
-        
-        vc.cidade_favorita = cellPressed
-        print("Apertei voltar")
-        //para não adicionar string vazia no array
-        if !vc.cidade.contains(cellPressed) {
-            vc.cidade.append(textField.text!)            
+    //deletar items da lista com gesture
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+
+        if editingStyle == .delete {
+            cidades.remove(at: indexPath.row) //remover a cell selecionada
+            print(indexPath.row)
+            print(cidades)
+//            print(cidades[indexPath.row])
+            
+            //passando self.cidades para atualizar e remover o item da cell do UserDefaults
+            defaults.set(cidades, forKey: "ListaFavoritos")
+            print(defaults.array(forKey: "ListaFavoritos") ?? [])
+            
+            tableView.beginUpdates()
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            tableView.endUpdates()
         }
     }
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        print("entrou no prepare()")
+//        let vc = segue.destination as! WeatherViewController
+//        vc.defaults = defaults
+//        defaults.set(cellPressed, forKey: "CidadeFavoritaClicada")
+//        vc.cidade_favorita = cellPressed
+        //para não adicionar string vazia no array
+//        if !vc.cidade.contains(cellPressed) {
+//            vc.cidade.append(textField.text!)
+//        }
+//    }
     
     @IBAction func addCidadePressed(_ sender: UIBarButtonItem) {
         //cria o alerta
@@ -76,7 +101,9 @@ class FavoriteTableViewController: UITableViewController {
             
             if !self.cidades.contains(self.textField.text!) {
                 self.cidades.append(self.textField.text!)
+                
                 self.defaults.set(self.cidades, forKey: "ListaFavoritos")
+                
                 self.tableView.reloadData()
             }
         }
@@ -89,15 +116,6 @@ class FavoriteTableViewController: UITableViewController {
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }
 
 //MARK: - Extensions
@@ -105,8 +123,6 @@ class FavoriteTableViewController: UITableViewController {
 //unwind para a VC desejada com a cidade através do botão exit pra voltar pra tela anterior passando dados
 extension WeatherViewController {
     @IBAction func unwindToWeatherViewController(segue: UIStoryboardSegue) {
-        weatherManager.fetchWeather(cityName: cidade_favorita)
-        print("print da unwindo qdo volta \(cidade_favorita)")
-        
+        weatherManager.fetchWeather(cityName: defaults.string(forKey: "CidadeFavoritaClicada") ?? "")
     }
 }
