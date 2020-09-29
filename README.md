@@ -1,7 +1,7 @@
 # Klima
 
 On this project I learned about:
-###Networking
+### Networking
 ###JSON Parsing (API)
 ###Core Location
 ###UserDefaults
