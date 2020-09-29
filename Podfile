@@ -8,5 +8,6 @@ target 'Klima' do
   # Pods for Klima
 
   pod 'SwiftSoup'
-
+  pod 'CLTypingLabel'
+	
 end

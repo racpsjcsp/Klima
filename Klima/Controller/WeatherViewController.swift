@@ -9,12 +9,13 @@
 import UIKit
 import SwiftSoup
 import CoreLocation
+import CLTypingLabel
 
 class WeatherViewController: UIViewController, UITextFieldDelegate  {
     
     @IBOutlet weak var conditionImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
-    @IBOutlet weak var cityLabel: UILabel!
+    @IBOutlet weak var cityLabel: CLTypingLabel!
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var favoriteButton: UIButton!
     
@@ -62,6 +63,8 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
