@@ -9,5 +9,5 @@
 * TableViews
 * Segues
 * Unwind View
-* Dependencies (Cocoapods)
-* Web Scraping (SwiftSoup)
+* Cocoapod Dependencies (CLTypingLabel, SwiftSoup)
+* Web Scraping with SwiftSoup
