@@ -1,4 +1,5 @@
 # Klima
+* This app was built for a class project with the purpose of learning Swift iOS development.
 
 ## Technologies Used:
 * Networking
