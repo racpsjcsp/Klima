@@ -13,13 +13,10 @@ class FavoriteTableViewController: UITableViewController {
     @IBOutlet weak var myTableView: UITableView!
     
     var defaults = UserDefaults.standard
-    
-    var textField = UITextField()
-    
+    var textField = UITextField()    
     var cidade: [String] = []
     var cidades: [String] = []
     var temperaturas: [String] = []
-//    var cellPressed: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,9 +59,6 @@ class FavoriteTableViewController: UITableViewController {
 
         if editingStyle == .delete {
             cidades.remove(at: indexPath.row) //remover a cell selecionada
-            print(indexPath.row)
-            print(cidades)
-//            print(cidades[indexPath.row])
             
             //passando self.cidades para atualizar e remover o item da cell do UserDefaults
             defaults.set(cidades, forKey: "ListaFavoritos")
@@ -75,18 +69,7 @@ class FavoriteTableViewController: UITableViewController {
             tableView.endUpdates()
         }
     }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        print("entrou no prepare()")
-//        let vc = segue.destination as! WeatherViewController
-//        vc.defaults = defaults
-//        defaults.set(cellPressed, forKey: "CidadeFavoritaClicada")
-//        vc.cidade_favorita = cellPressed
-        //para não adicionar string vazia no array
-//        if !vc.cidade.contains(cellPressed) {
-//            vc.cidade.append(textField.text!)
-//        }
-//    }
+
     
     @IBAction func addCidadePressed(_ sender: UIBarButtonItem) {
         //cria o alerta

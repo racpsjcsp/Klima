@@ -14,29 +14,28 @@ class AlertTableViewController: UITableViewController {
     @IBOutlet weak var myTableView: UITableView!
     
     var cidades: [String] = []
-    
     var alertas: [String] = []
-    
     var estadoLista = [AlertaModel]()
-    
     let cellName = "AlertCell"
     
-    let headerEstados = ["Acre (AC)", "Alagoas (AL)", "Amapá (AP)",
-                         "Amazonas (AM)", "Bahia (BA)", "Ceará (CE)", "Distrito Federal (DF)",
-                         "Espírito Santo (ES)","Goiás (GO)", "Maranhão (MA)", "Mato Grosso (MT)",
-                         "Mato Grosso do Sul (MS)", "Minas Gerais (MG)", "Pará (PA)",
-                         "Paraíba (PB)", "Paraná (PR)", "Pernambuco (PE)", "Piauí (PI)",
-                         "Rio de Janeiro (RJ)", "Rio Grande do Norte (RN)",
-                         "Rio Grande do Sul (RS)", "Rondônia (RO)", "Roraima (RR)",
-                         "Santa Catarina (SC)", "São Paulo (SP)", "Sergipe (SE)", "Tocantins (TO)"]
+    let headerEstados = [
+        "Acre (AC)", "Alagoas (AL)", "Amapá (AP)", "Amazonas (AM)", "Bahia (BA)", "Ceará (CE)",
+        "Distrito Federal (DF)", "Espírito Santo (ES)","Goiás (GO)", "Maranhão (MA)",
+        "Mato Grosso (MT)", "Mato Grosso do Sul (MS)", "Minas Gerais (MG)", "Pará (PA)",
+        "Paraíba (PB)", "Paraná (PR)", "Pernambuco (PE)", "Piauí (PI)", "Rio de Janeiro (RJ)",
+        "Rio Grande do Norte (RN)", "Rio Grande do Sul (RS)", "Rondônia (RO)", "Roraima (RR)",
+        "Santa Catarina (SC)", "São Paulo (SP)", "Sergipe (SE)", "Tocantins (TO)"
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        myTableView.delegate = self
-        myTableView.dataSource = self
-        raspagemAlerta()
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
         
+//        myTableView.delegate = self
+//        myTableView.dataSource = self
+        
+        raspagemAlerta()
         
     }
     
@@ -51,15 +50,19 @@ class AlertTableViewController: UITableViewController {
         let text = estadoLista[indexPath.section].alerta[indexPath.row]
         
         cell.textLabel?.text = text
-        cell.textLabel?.textColor = .white
-        cell.textLabel?.font = .italicSystemFont(ofSize: 16)
+        
+        //se o alerta contem a "string", muda a cor do fundo
+        if text.range(of:"potencial") != nil {
+            cell.backgroundColor = #colorLiteral(red: 0.9995340705, green: 0.9967971816, blue: 0.658982346, alpha: 1)
+        } else if text.range(of: "Grande") != nil {
+            cell.backgroundColor = #colorLiteral(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1)
+        } else {
+            cell.backgroundColor = #colorLiteral(red: 0.9764705896, green: 0.710458073, blue: 0.6392081146, alpha: 1)
+        }
+        
         return cell
     }
    
-    
-    
-    
-    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return estadoLista.count
     }
@@ -73,8 +76,6 @@ class AlertTableViewController: UITableViewController {
         }
         return nil
     }
-    
-
     
     //ir para tela de favoritos a partir da tela de alerta
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {

@@ -13,6 +13,8 @@ import CLTypingLabel
 
 class WeatherViewController: UIViewController, UITextFieldDelegate  {
     
+    @IBOutlet weak var viewForSwipe: UIView!
+    
     @IBOutlet weak var conditionImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var cityLabel: CLTypingLabel!
@@ -55,17 +57,12 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
     var temp: String = ""
     var cidades: [String] = []
     var temperatura: [String] = []
-    
-//    var cidade_favorita = String()
-    
     var defaults = UserDefaults.standard
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
+        //atualizando info via GPS
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
@@ -78,7 +75,6 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
         }
         
         print(defaults.array(forKey: "ListaFavoritos") ?? [])
-        
     }
     
     @IBAction func searchPressed(_ sender: UIButton) {
@@ -95,15 +91,9 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
         if !cidades.contains(city) {
             cidades.append(city)
             defaults.set(cidades, forKey: "ListaFavoritos")
-//            print("dentro do favoritePressed()")
-//            print("print cidade: \(cidades)")
-//           print(defaults.array(forKey: "ListaFavoritos") ?? [])
-//            print("Testando  o '+' WeatherViewController")
-//            print(cidade.filter{$0 != ""})
-//            print(city)
         }
     }
-    
+        
     //verifica se o alerta vai aparecer, se sim, evita de ir para a próxima segue (favoritos)
     override func shouldPerformSegue(withIdentifier identifier: String?, sender: Any?) -> Bool {
         if let ident = identifier {
@@ -127,30 +117,29 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
     //envia os dados para a segue (favoritos)
 //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 //        if segue.identifier == "addFavoriteView" {
-////            let vc = segue.destination as! FavoriteTableViewController
+//            let vc = segue.destination as! FavoriteTableViewController
 //
-////            if self.cidades.contains("") {
-////                self.cidades.remove(at: 0)
-////            }
+//            if self.cidades.contains("") {
+//                self.cidades.remove(at: 0)
+//            }
 //            if !self.cidades.contains(city) {
 //                self.cidades.append(city)
-////                vc.cidades.append(city)
-////                vc.defaults.set(<#T##value: Any?##Any?#>, forKey: <#T##String#>)
-//
+//                vc.cidades.append(city)
+
 //                print("dentro do prepare()")
 //                 print("print cidade: \(cidades)")
 //                print(defaults.array(forKey: "ListaFavoritos") ?? [])
-////                self.temperatura.append(temp)
+//                self.temperatura.append(temp)
 //            }
-////            vc.cidades = self.cidade
+//            vc.cidades = self.cidade
 //
 //        }
 //
 //        //guardando data ao clicar para visualizar os favoritos
-////        if segue.identifier == "viewFavorites" {
-////            let vc = segue.destination as! FavoriteTableViewController
-////            vc.cidades = self.cidades
-////        }
+//        if segue.identifier == "viewFavorites" {
+//            let vc = segue.destination as! FavoriteTableViewController
+//            vc.cidades = self.cidades
+//        }
 //    }
     
     //detectar qdo clicar no "ir" (return) do teclado"
