@@ -51,6 +51,7 @@ class AlertTableViewController: UITableViewController {
         
         cell.textLabel?.text = text
         
+        
         //se o alerta contem a "string", muda a cor do fundo
         if text.range(of:"potencial") != nil {
             cell.backgroundColor = #colorLiteral(red: 0.9995340705, green: 0.9967971816, blue: 0.658982346, alpha: 1)
@@ -59,7 +60,7 @@ class AlertTableViewController: UITableViewController {
         } else {
             cell.backgroundColor = #colorLiteral(red: 0.9764705896, green: 0.710458073, blue: 0.6392081146, alpha: 1)
         }
-        
+        cell.textLabel?.textColor = .black
         return cell
     }
    
