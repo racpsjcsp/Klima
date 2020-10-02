@@ -82,7 +82,7 @@ class AlertTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let label = UILabel()
-        label.backgroundColor = #colorLiteral(red: 0.4783813357, green: 0.505931437, blue: 0.9998773932, alpha: 1)
+        label.backgroundColor = #colorLiteral(red: 0.5818830132, green: 0.2156915367, blue: 1, alpha: 1)
         label.textColor = .white
         label.textAlignment = .center
         label.font = label.font.withSize(20)      
