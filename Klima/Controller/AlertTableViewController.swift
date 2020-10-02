@@ -51,7 +51,6 @@ class AlertTableViewController: UITableViewController {
         
         cell.textLabel?.text = text
         
-        
         //se o alerta contem a "string", muda a cor do fundo
         if text.range(of:"potencial") != nil {
             cell.backgroundColor = #colorLiteral(red: 0.9995340705, green: 0.9967971816, blue: 0.658982346, alpha: 1)
@@ -63,19 +62,39 @@ class AlertTableViewController: UITableViewController {
         cell.textLabel?.textColor = .black
         return cell
     }
+    
+    
+//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        let alert = UIAlertController(title: "Área Afetada", message: "", preferredStyle: .alert)
+//
+//        let cancelAction = UIAlertAction(title: "OK", style: .cancel) { (action:UIAlertAction!) in }
+//        //adiciona a ação de cancelar no alerta
+//        alert.addAction(cancelAction)
+//
+//        //adiciona a ação no alerta
+//        present(alert, animated: true, completion: nil)
+//    }
    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return estadoLista.count
     }
-    
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let label = UILabel()
+        label.backgroundColor = #colorLiteral(red: 0.4783813357, green: 0.505931437, blue: 0.9998773932, alpha: 1)
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = label.font.withSize(20)      
+        
         //comparando listas para decidir quais estados exibir baseando se tem alerta ou não
         for item in headerEstados {
             if item.lowercased().contains(estadoLista[section].estado.lowercased()) {
-                return item
+                label.text = item
             }
         }
-        return nil
+               
+        return label
     }
     
     //ir para tela de favoritos a partir da tela de alerta
@@ -131,10 +150,13 @@ class AlertTableViewController: UITableViewController {
                     estado = try titulo.attr("title")
                     if !estadosPossiveis.contains(estado) {
                         estadosPossiveis.append(estado)
+                        
                         var alertas: [String] = []
+                        
                         //raspagem das linhas cinza1
                         if let divLinha: Element = try divEstado.getElementById("estados_quadro2_barra_cinza1") {
                             let link: Elements = try divLinha.select("a[href]")
+                    
                             for i in link {
                                 let atributo: Elements = try i.getElementsByAttribute("title")
                                 for j in atributo {
@@ -144,6 +166,7 @@ class AlertTableViewController: UITableViewController {
                         //raspagem das linhas cinza2
                         } else if let divLinha: Element = try divEstado.getElementById("estados_quadro2_barra_cinza2") {
                             let link: Elements = try divLinha.select("a[href]")
+                            
                             for i in link {
                                 let atributo: Elements = try i.getElementsByAttribute("title")
                                 for j in atributo {
@@ -167,6 +190,13 @@ class AlertTableViewController: UITableViewController {
             print("")
         }
     }
+    
+    
+    
+    
+    
+    
+    
 }
 
 //MARK: - Extensions

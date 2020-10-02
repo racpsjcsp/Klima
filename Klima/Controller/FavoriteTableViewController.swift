@@ -45,7 +45,6 @@ class FavoriteTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
         defaults.set(cell.textLabel!.text!, forKey: "CidadeFavoritaClicada")
-//        cellPressed = cell.textLabel!.text!
         
         performSegue(withIdentifier: "unwindFavorite", sender: cell)
     }    
