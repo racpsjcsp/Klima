@@ -92,6 +92,7 @@ class FavoriteTableViewController: UITableViewController {
         
         alert.addTextField { (alertTextField) in
             alertTextField.placeholder = "Cidade"
+            alertTextField.autocapitalizationType = .words
             self.textField = alertTextField
         }
         //adiciona a ação no alerta
