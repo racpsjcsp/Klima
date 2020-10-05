@@ -63,7 +63,6 @@ class AlertTableViewController: UITableViewController {
         return cell
     }
     
-    
 //    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        let alert = UIAlertController(title: "Área Afetada", message: "", preferredStyle: .alert)
 //
@@ -82,7 +81,7 @@ class AlertTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let label = UILabel()
-        label.backgroundColor = #colorLiteral(red: 0.5818830132, green: 0.2156915367, blue: 1, alpha: 1)
+        label.backgroundColor = #colorLiteral(red: 0.3236978054, green: 0.1063579395, blue: 0.574860394, alpha: 1)
         label.textColor = .white
         label.textAlignment = .center
         label.font = label.font.withSize(20)      
@@ -190,12 +189,6 @@ class AlertTableViewController: UITableViewController {
             print("")
         }
     }
-    
-    
-    
-    
-    
-    
     
 }
 

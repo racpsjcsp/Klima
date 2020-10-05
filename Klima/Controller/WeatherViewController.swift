@@ -78,10 +78,11 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
     }
     
     @IBAction func searchPressed(_ sender: UIButton) {
-        searchTextField.endEditing(true) //esconde o teclado qdo usuário termina de digitar
+        //esconde o teclado qdo usuário termina de digitar
+        searchTextField.endEditing(true)
     }
     
-    @IBAction func favoritePressed(_ sender: UIButton) { //pegar cidade da label e passar para segue
+    @IBAction func favoritePressed(_ sender: UIButton) {
         city = cityLabel.text!
 
         if let cidadesDefaults = defaults.array(forKey: "ListaFavoritos") as? [String] {
@@ -101,46 +102,13 @@ class WeatherViewController: UIViewController, UITextFieldDelegate  {
                 if city == "" {
                     return false //return false para cancelar a passagem de tela
                 }
-                if self.cidades.contains(city) {
-//                    let cancelAlert = UIAlertAction(title: "OK", style: .cancel)
-//                    let alert = UIAlertController(title: "Aviso", message: "Cidade já adicionada!", preferredStyle: .alert)
-//                    present(alert, animated: true)
-//                    alert.addAction(cancelAlert)
-                    
+                if self.cidades.contains(city) {                    
                     return true
                 }
             }
         }
         return true
     }
-    
-    //envia os dados para a segue (favoritos)
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "addFavoriteView" {
-//            let vc = segue.destination as! FavoriteTableViewController
-//
-//            if self.cidades.contains("") {
-//                self.cidades.remove(at: 0)
-//            }
-//            if !self.cidades.contains(city) {
-//                self.cidades.append(city)
-//                vc.cidades.append(city)
-
-//                print("dentro do prepare()")
-//                 print("print cidade: \(cidades)")
-//                print(defaults.array(forKey: "ListaFavoritos") ?? [])
-//                self.temperatura.append(temp)
-//            }
-//            vc.cidades = self.cidade
-//
-//        }
-//
-//        //guardando data ao clicar para visualizar os favoritos
-//        if segue.identifier == "viewFavorites" {
-//            let vc = segue.destination as! FavoriteTableViewController
-//            vc.cidades = self.cidades
-//        }
-//    }
     
     //detectar qdo clicar no "ir" (return) do teclado"
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
